@@ -29,11 +29,29 @@ export default function RootLayout() {
 
   return (
     <ThemeProvider value={colorScheme === 'dark' ? DarkTheme : DefaultTheme}>
-      <Stack>
-        <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
-        <Stack.Screen name="+not-found" />
-      </Stack>
-      <StatusBar style="auto" />
-    </ThemeProvider>
+    <Stack>
+      {/* شاشة التابات مع إخفاء الهيدر */}
+      <Stack.Screen name="(tabs)" options={{ headerShown: false }} />
+
+      {/* الشاشة الرئيسية */}
+      {/* <Stack.Screen
+        name="index"
+        options={{ title: "Home", headerShown: false }}
+      /> */}
+
+      {/* شاشة الاتصال */}
+      {/* <Stack.Screen
+        name="contact"
+        options={{ title: "Contact Us" }}
+      /> */}
+
+      {/* صفحة الخطأ */}
+      <Stack.Screen
+        name="+not-found"
+        options={{ title: "404 Not Found" }}
+      />
+    </Stack>
+  </ThemeProvider>
   );
+
 }
