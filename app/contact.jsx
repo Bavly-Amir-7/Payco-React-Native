@@ -1,6 +1,6 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, ScrollView } from 'react-native';
-import icedCoffeeImg from "../../assets/images/iced-coffee.png";
+import icedCoffeeImg from "../assets/images/iced-coffee.png";
 
 const Details = () => {
   return (
