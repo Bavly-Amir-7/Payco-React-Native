@@ -12,7 +12,7 @@ const App = () => {
         resizeMode="cover"
         style={styles.image}
       >
-        <Text style={styles.title}>Coffee Shopppppppppppp</Text>
+        <Text style={styles.title}>Coffee Shop</Text>
 
 
         <Link href="/contact" style={{ marginHorizontal: 'auto' }} asChild>
