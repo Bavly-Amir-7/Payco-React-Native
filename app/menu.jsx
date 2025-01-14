@@ -18,7 +18,7 @@ export default function MenuScreen() {
 
     const separatorComp = <View style={styles.separator} />
 
-   //! const headerComp = <Text>Top Of List </Text>
+    //! const headerComp = <Text>Top Of List </Text>
     const footerComp = <Text>End Of List </Text>
 
     return (
@@ -31,21 +31,23 @@ export default function MenuScreen() {
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.contentContainer}
                 ItemSeparatorComponent={separatorComp}
-               //! ListHeaderComponent={headerComp}
+                //! ListHeaderComponent={headerComp}
                 ListFooterComponent={footerComp}
-                ListFooterComponentStyle={ styles.footerComp}
+                ListFooterComponentStyle={styles.footerComp}
                 ListEmptyComponent={<Text>No Items</Text>}
                 // Render each item in the list
                 renderItem={({ item }) => (
-                    <View style={styles.card}>
-                        <View>
+                    <View style={styles.row}>
+                        <View style={styles.menuTextRow}>
                             {/* Display the title of the menu item */}
-                            <Text style={styles.title}>{item.title}</Text>
+                            <Text style={[styles.menuItemTitle, styles.menuItemText]}>{item.title}</Text>
                             {/* Display the description of the menu item */}
-                            <Text style={styles.description}>{item.description}</Text>
+                            <Text style={styles.menuItemText}>{item.description}</Text>
                         </View>
                         {/* Display the image corresponding to the menu item */}
-                        <Image source={MenuImages[item.id - 1]} style={styles.image} />
+                        <Image
+                            source={MenuImages[item.id - 1]} style={styles.image}
+                            style={styles.MenuImages} />
                     </View>
                 )}
             />
@@ -71,7 +73,41 @@ function createStyles(theme, colorScheme) {
             marginBottom: 10,
         },
         footerComp: {
-            marginHorizontal: 'auto' 
-        }
+            marginHorizontal: 'auto'
+        },
+        row: {
+            flexDirection: 'row',
+            width: '100%',
+            maxWidth: 600,
+            height: 100,
+            marginBottom: 10,
+            borderStyle: 'solid',
+            borderColor: colorScheme === 'dark' ? 'papayawhip' : '#000',
+            borderWidth: 1,
+            borderRadius: 20,
+            overflow: 'hidden',
+            marginHorizontal: 'auto',
+        },
+        menuTextRow: {
+            width: '65%',
+            paddingTop: 10,
+            paddingLeft: 10,
+            paddingRight: 5,
+            flexGrow: 1,
+        },
+        menuItemTitle: {
+            fontSize: 18,
+            textDecorationLine: 'underline',
+        },
+        menuItemText: {
+            color: theme.text,
+        },
+        MenuImages: {
+            width: 100,
+            height: 100,
+
+        },
+
+
     });
 }
