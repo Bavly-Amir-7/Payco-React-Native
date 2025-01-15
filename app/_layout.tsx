@@ -7,8 +7,7 @@ import 'react-native-reanimated';
 import { Appearance } from 'react-native';
 import { Colors } from '@/constants/Colors';
 
-
-// Prevent the splash screen from auto-hiding before asset loading is complete.
+// Prevent the splash screen from auto-hiding before asset loading is complete
 SplashScreen.preventAutoHideAsync();
 
 export default function RootLayout() {
@@ -30,17 +29,28 @@ export default function RootLayout() {
   }
 
   return (
-    <Stack screenOptions={{
-      headerStyle: { backgroundColor: theme.headerBackground },
-      headerTintColor: theme.text,
-      headerShadowVisible: false
-    }}>
+    <Stack
+      screenOptions={{
+        headerStyle: { backgroundColor: theme.headerBackground },
+        headerTintColor: theme.text,
+        headerShadowVisible: false,
+      }}
+    >
       <Stack.Screen name="index" options={{ headerShown: false, title: 'Home' }} />
       <Stack.Screen name="menu" options={{ headerShown: true, title: 'Menu', headerTitle: 'Coffe Shop Menu' }} />
       <Stack.Screen name="contact" options={{ headerShown: true, title: 'Contact', headerTitle: 'Contact Us' }} />
+      <Stack.Screen name="order" options={{ headerShown: true, title: 'Order', headerTitle: 'Online Order' }} />
+      <Stack.Screen name="Sign" options={{ headerShown: true, title: 'Sign', headerTitle: 'Sign Page' }} />
+      <Stack.Screen name="login" options={{ headerShown: true, title: 'Login', headerTitle: 'Login Page' }} />
+      <Stack.Screen
+        name="cart"
+        options={{
+          headerShown: true,
+          title: 'Cart',
+          headerTitle: 'Your Cart',
+        }}
+      />
       <Stack.Screen name="+not-found" options={{ headerShown: false }} />
     </Stack>
   );
-
-
 }

@@ -1,37 +1,63 @@
 import React from 'react';
 import { View, Text, StyleSheet, ImageBackground, Pressable } from 'react-native';
 import { Link } from 'expo-router';
-
-import icedCoffeeImg from "../assets/images/iced-coffee.png";
+import { Ionicons } from '@expo/vector-icons'; // Adding icons
+import icedCoffeeImg from "../assets/images/iced-coffee.png"; // Your background image
 
 const App = () => {
   return (
     <View style={styles.container}>
-      <ImageBackground
-        source={icedCoffeeImg}
-        resizeMode="cover"
-        style={styles.image}
-      >
-        <Text style={styles.title}>Coffee Shop</Text>
+      {/* Background Image */}
+      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
+        {/* Title */}
+        <Text style={styles.title}>☕ Welcome to Our Coffee World</Text>
 
+        {/* Buttons with Icons */}
+        <Link href="/login" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="person" size={24} color="#efbf04" />
+            <Text style={styles.buttonText}>Login</Text>
+          </Pressable>
+        </Link>
 
-        <Link href="/menu" style={{ marginHorizontal: 'auto' }} asChild>
-          <Pressable style={styles.button}>
+        <Link href="/signup" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="person-add" size={24} color="#efbf04" />
+            <Text style={styles.buttonText}>Sign Up</Text>
+          </Pressable>
+        </Link>
+
+        <Link href="/menu" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="document-text" size={24} color="#efbf04" /> {/* Changed icon */}
             <Text style={styles.buttonText}>Menu</Text>
           </Pressable>
         </Link>
 
+        <Link href="/order" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="cart" size={24} color="#efbf04" />
+            <Text style={styles.buttonText}>Order Now</Text>
+          </Pressable>
+        </Link>
 
-        <Link href="/contact" style={{ marginHorizontal: 'auto' }} asChild>
-          <Pressable style={styles.button}>
+        <Link href="/cart" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="basket" size={24} color="#efbf04" />
+            <Text style={styles.buttonText}>View Cart</Text>
+          </Pressable>
+        </Link>
+
+      
+
+        <Link href="/contact" asChild>
+          <Pressable style={styles.roundButton}>
+            <Ionicons name="call" size={24} color="#efbf04" />
             <Text style={styles.buttonText}>Contact Us</Text>
           </Pressable>
         </Link>
 
-     
-
-
-
+      
       </ImageBackground>
     </View>
   );
@@ -39,6 +65,7 @@ const App = () => {
 
 export default App;
 
+// Styles
 const styles = StyleSheet.create({
   container: {
     flex: 1,
@@ -48,40 +75,44 @@ const styles = StyleSheet.create({
     width: '100%',
     height: '100%',
     flex: 1,
-    resizeMode: 'cover',
     justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)', // Transparent overlay
   },
   title: {
-    color: 'white',
+    color: '#efbf04',  // اللون المطلوب
     fontSize: 42,
     fontWeight: 'bold',
     textAlign: 'center',
-    backgroundColor: "rgba(0,0,0,0.5)",
-    marginBottom: 120,
-  },
-  link: {
-    color: 'white',
-    fontSize: 42,
-    fontWeight: 'bold',
-    textAlign: 'center',
-    textDecorationLine: "underline",
-    backgroundColor: "rgba(0,0,0,0.5)",
-    padding: 4,
-  },
-  button: {
-    height: 60,
-    width: 150,
-    borderRadius: 20,
-    backgroundColor: 'rgba(0,0,0,0.75)',
-    padding: 6,
-    justifyContent: "center",
     marginBottom: 50,
+    textShadowColor: 'rgba(0, 0, 0, 0.9)',
+    textShadowOffset: { width: 3, height: 3 },
+    textShadowRadius: 15,
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',  // إضافة خلفية شبه شفافة
+    padding: 10,  // إضافة حواف حول النص لزيادة التأثير
+    borderRadius: 10,  // إضافة زاوية دائرية
+  },
+  
+  roundButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.6)',  // إضافة خلفية شبه شفافة
+    borderRadius: 50,
+    paddingVertical: 15,
+    paddingHorizontal: 25,
+    width: 220,
+    marginBottom: 20,
+    shadowColor: '#000',
+    shadowOffset: { width: 0, height: 10 },
+    shadowOpacity: 0.3,
+    shadowRadius: 15,
+    elevation: 10,
   },
   buttonText: {
-    color: 'white',
-    fontSize: 16,
+    color: '#efbf04',
+    fontSize: 18,
     fontWeight: 'bold',
-    textAlign: 'center',
-    padding: 4,
+    marginLeft: 10,
   },
 });
