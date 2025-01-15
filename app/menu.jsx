@@ -1,6 +1,19 @@
-import { View, Text, StyleSheet, ImageBackground, Pressable, Appearance, Platform, ScrollView, SafeAreaView, FlatList, Image } from 'react-native';
+import React from 'react';
+import {
+    View,
+    Text,
+    StyleSheet,
+    ImageBackground,
+    Pressable,
+    Appearance,
+    Platform,
+    ScrollView,
+    SafeAreaView,
+    FlatList,
+    Image,
+} from 'react-native';
 import { Colors } from '@/constants/Colors';
-import { MENU_ITEMS } from "../constants/MenuItems";
+import { MENU_ITEMS } from '../constants/MenuItems';
 import MenuImages from '../constants/MenuImages'; // Ensure correct import of MenuImages
 
 export default function MenuScreen() {
@@ -16,10 +29,11 @@ export default function MenuScreen() {
     // Use ScrollView for web and SafeAreaView for other platforms
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-    const separatorComp = <View style={styles.separator} />
+    // Separator component for list items
+    const separatorComp = <View style={styles.separator} />;
 
-    //! const headerComp = <Text>Top Of List </Text>
-    const footerComp = <Text>End Of List </Text>
+    // Footer component for the list
+    const footerComp = <Text style={styles.footerText}>End Of Menu</Text>;
 
     return (
         <Container>
@@ -30,8 +44,7 @@ export default function MenuScreen() {
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.contentContainer}
-                ItemSeparatorComponent={separatorComp}
-                //! ListHeaderComponent={headerComp}
+                ItemSeparatorComponent={() => separatorComp}
                 ListFooterComponent={footerComp}
                 ListFooterComponentStyle={styles.footerComp}
                 ListEmptyComponent={<Text>No Items</Text>}
@@ -46,8 +59,9 @@ export default function MenuScreen() {
                         </View>
                         {/* Display the image corresponding to the menu item */}
                         <Image
-                            source={MenuImages[item.id - 1]} style={styles.image}
-                            style={styles.MenuImages} />
+                            source={MenuImages[item.id - 1]}
+                            style={styles.menuImage}
+                        />
                     </View>
                 )}
             />
@@ -55,7 +69,7 @@ export default function MenuScreen() {
     );
 }
 
-// Corrected the function name from creatStyles to createStyles
+// Function to create styles based on the theme and color scheme
 function createStyles(theme, colorScheme) {
     return StyleSheet.create({
         contentContainer: {
@@ -73,7 +87,14 @@ function createStyles(theme, colorScheme) {
             marginBottom: 10,
         },
         footerComp: {
-            marginHorizontal: 'auto'
+            color: theme.text,
+            marginHorizontal: 'auto',
+        },
+        footerText: {
+            fontSize: 16,
+            textAlign: 'center',
+            color: theme.text,
+            marginVertical: 10,
         },
         row: {
             flexDirection: 'row',
@@ -102,12 +123,10 @@ function createStyles(theme, colorScheme) {
         menuItemText: {
             color: theme.text,
         },
-        MenuImages: {
+        menuImage: {
             width: 100,
             height: 100,
-
+            borderRadius: 10,
         },
-
-
     });
 }
