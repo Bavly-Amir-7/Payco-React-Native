@@ -29,7 +29,7 @@ const Login = () => {
     <SafeAreaView style={styles.safeContainer}>
       <ImageBackground
         source={icedCoffeeImg}
-        style={[styles.image, isTablet && styles.tabletImage]} // Apply tablet-specific styles
+        style={styles.image}
         resizeMode="cover"
       >
         {/* Blur Overlay */}
@@ -113,15 +113,13 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: height, // Ensure background covers the entire screen
-    justifyContent: 'center',
-    alignItems: 'center',
-  },
-  tabletImage: {
-    height: height + 100, // Extend background height for tablets
   },
   blurOverlay: {
-    flex: 1, // Ensure blur covers the entire screen
-    width: '100%',
+    position: 'absolute', // Ensure it covers the entire screen
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,

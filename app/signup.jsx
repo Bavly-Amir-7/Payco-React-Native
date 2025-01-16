@@ -140,7 +140,7 @@ const SignUp = () => {
           <Text style={styles.link}>
             Already have an account?{' '}
             <Text style={styles.loginLink} onPress={navigateToLogin}>
-              Login
+              Sign in
             </Text>
           </Text>
         </BlurView>
@@ -163,11 +163,14 @@ const styles = StyleSheet.create({
     height: height, // Cover the entire screen
   },
   tabletImage: {
-    height: height + 100, // Extend height for tablets
+    height: height + 150, // Extend height for tablets
   },
   blurOverlay: {
-    flex: 1, // Ensure it covers the entire screen
-    width: '100%',
+    position: 'absolute', // Ensure it covers the entire screen
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
     justifyContent: 'center',
     alignItems: 'center',
     padding: 20,
