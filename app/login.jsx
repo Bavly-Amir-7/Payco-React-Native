@@ -1,234 +1,174 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, Animated, ImageBackground, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For icons
-import { useNavigation } from '@react-navigation/native'; // For navigation
+import { View, Text, StyleSheet, ImageBackground, TextInput, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { Ionicons } from '@expo/vector-icons';
 import icedCoffeeImg from "../assets/images/iced-coffee.png"; // Your background image
 
-export default function LoginScreen() {
-  const navigation = useNavigation(); // For navigation
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [loginBtnScale, setLoginBtnScale] = useState(new Animated.Value(1));
+const Login = () => {
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const navigation = useNavigation(); // Access navigation object
 
-  const handleLoginPressIn = () => {
-    Animated.spring(loginBtnScale, {
-      toValue: 1.1,
-      friction: 3,
-      tension: 150,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const handleLoginPressOut = () => {
-    Animated.spring(loginBtnScale, {
-      toValue: 1,
-      friction: 3,
-      tension: 150,
-      useNativeDriver: true,
-    }).start();
-  };
-
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
-
-  const handleLogin = () => {
-    if (email && password) {
-      // Handle login logic
-      console.log('Logged in successfully');
-    } else {
-      alert('Please fill in both fields!');
-    }
-  };
-
-  const handleGoogleLogin = () => {
-    // Handle Google login logic here
-    console.log('Logged in with Google');
-  };
-
-  const handleFacebookLogin = () => {
-    console.log('Logged in with Facebook');
-  };
-
-  const handlePhoneLogin = () => {
-    console.log('Logged in with Phone');
-  };
-
+  // Function to navigate to the SignUp page
   const navigateToSignUp = () => {
-    navigation.navigate('signup'); // Navigate to SignUp page
+    navigation.navigate('signup'); // Navigate to the 'SignUp' screen
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.imageBackground}>
-        <View >
-          <Text style={styles.title}>Login</Text>
+    <View style={styles.container}>
+      {/* Background Image */}
+      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
+        {/* Title */}
+        <Text style={styles.title}>Login</Text>
 
-          {/* Email Input */}
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#7F7F7F"
-            value={email}
-            onChangeText={setEmail}
-            textAlign="right" // Arabic text alignment
-            writingDirection="rtl" // Ensure proper alignment for Arabic text
+            placeholderTextColor="#ccc"
+            style={styles.input}
           />
+        </View>
 
-          {/* Password Input */}
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#7F7F7F"
-              value={password}
-              onChangeText={setPassword}
-              secureTextEntry={!isPasswordVisible}
-              textAlign="right" // Arabic text alignment
-              writingDirection="rtl" // Ensure proper alignment for Arabic text
-            />
-            <Pressable onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-              <Ionicons
-                name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                size={24}
-                color="#7F7F7F"
-              />
-            </Pressable>
-          </View>
-
-          {/* Login Button */}
-          <Animated.View
-            style={[styles.loginButton, { transform: [{ scale: loginBtnScale }] }] }
-            onTouchStart={handleLoginPressIn}
-            onTouchEnd={handleLoginPressOut}
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#ccc"
+            secureTextEntry={!passwordVisible}
+            style={styles.input}
+          />
+          <Pressable
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            style={styles.eyeIcon}
           >
-            <Pressable onPress={handleLogin} style={styles.button}>
-              <Text style={styles.buttonText}>Login</Text>
-            </Pressable>
-          </Animated.View>
-
-          {/* Google Login Button (Red) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#DB4437' }]} onPress={handleGoogleLogin}>
-            <Ionicons name="logo-google" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Login with Google</Text>
-          </Pressable>
-
-          {/* Facebook Login Button (Blue) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#3b5998' }]} onPress={handleFacebookLogin}>
-            <Ionicons name="logo-facebook" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Login with Facebook</Text>
-          </Pressable>
-
-          {/* Phone Login Button (Green) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#4CAF50' }]} onPress={handlePhoneLogin}>
-            <Ionicons name="call-outline" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Login with Phone</Text>
-          </Pressable>
-
-          {/* Forgot Password */}
-          <Pressable style={styles.forgotPassword} onPress={() => alert('Redirect to Forgot Password page')}>
-            <Text style={styles.forgotPasswordText}>Forgot Password?</Text>
-          </Pressable>
-
-          {/* Redirect to Sign Up */}
-          <Pressable style={styles.signupRedirect} onPress={navigateToSignUp}>
-            <Text style={styles.signupRedirectText}>Don't have an account? Sign Up</Text>
+            <Ionicons
+              name={passwordVisible ? "eye-off" : "eye"}
+              size={24}
+              color="#ccc"
+            />
           </Pressable>
         </View>
-      </ImageBackground>
-    </ScrollView>
-  );
-}
 
+        {/* Login Button */}
+        <Pressable style={[styles.button, styles.loginButton]}>
+          <Text style={styles.buttonText}>Login</Text>
+        </Pressable>
+
+        {/* Social Buttons */}
+        <Pressable style={[styles.button, styles.googleButton]}>
+          <Ionicons name="logo-google" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Login with Google</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, styles.facebookButton]}>
+          <Ionicons name="logo-facebook" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Login with Facebook</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, styles.phoneButton]}>
+          <Ionicons name="call" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Login with Phone</Text>
+        </Pressable>
+
+        {/* Links */}
+        <Text style={styles.link}>Forgot Password?</Text>
+        <Text style={styles.link}>
+          Don't have an account?{" "}
+          <Text style={styles.signUpLink} onPress={navigateToSignUp}>
+            Sign Up
+          </Text>
+        </Text>
+      </ImageBackground>
+    </View>
+  );
+};
+
+export default Login;
+
+// Styles
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
     flex: 1,
+    flexDirection: 'column',
   },
-  imageBackground: {
+  image: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
-    width: '100%',
-    height: '100%', // Ensure full screen coverage
-  },
-  container: {
     alignItems: 'center',
+    padding: 20,
   },
   title: {
-    fontSize: 36,
     color: '#fff',
+    fontSize: 36,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 30,
-    textShadowColor: '#000',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 10,
   },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+    position: 'relative',
+  },
   input: {
     width: '100%',
-    height: 50,
-    backgroundColor: '#fff',
-    marginBottom: 15,
-    paddingLeft: 15,
-    borderRadius: 10,
+    backgroundColor: 'rgba(113, 51, 51, 0.73)', // خلفية شفافة قليلاً
+    borderRadius: 25,
+    padding: 15,
+    paddingHorizontal: 20,
+    color: '#fff',
     fontSize: 16,
-  },
-  passwordContainer: {
-    width: '100%',
-    position: 'relative',
+    borderWidth: 1, // حدود واضحة
+    borderColor: '#fff',
   },
   eyeIcon: {
     position: 'absolute',
-    right: 15,
-    top: 10,
-  },
-  loginButton: {
-    width: '100%',
-    marginBottom: 20,
+    right: 20,
+    top: '50%',
+    transform: [{ translateY: -12 }],
   },
   button: {
-    backgroundColor: '#4B2E83',
+    width: '100%',
+    borderRadius: 25,
     paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  socialButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
-    width: '80%',  // Ensuring equal width for all buttons
-    alignSelf: 'center',  // Center the buttons horizontally
-    justifyContent: 'center',  // Center the text and icon inside the button
   },
-  socialButtonText: {
+  loginButton: {
+    backgroundColor: '#6C63FF',
+  },
+  googleButton: {
+    backgroundColor: '#DB4437',
+  },
+  facebookButton: {
+    backgroundColor: '#4267B2',
+  },
+  phoneButton: {
+    backgroundColor: '#0F9D58',
+  },
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10,
   },
-  forgotPassword: {
-    marginTop: 15,
+  icon: {
+    marginRight: 10,
   },
-  forgotPasswordText: {
+  link: {
     color: '#fff',
-    fontSize: 16,
-    textDecorationLine: 'underline',
+    fontSize: 14,
+    marginTop: 10,
+    textAlign: 'center',
   },
-  signupRedirect: {
-    marginTop: 15,
-  },
-  signupRedirectText: {
-    color: '#fff',
-    fontSize: 16,
+  signUpLink: {
+    fontWeight: 'bold',
     textDecorationLine: 'underline',
   },
 });

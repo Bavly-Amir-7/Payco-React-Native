@@ -1,291 +1,246 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, TextInput, Pressable, Animated, ImageBackground, ScrollView } from 'react-native';
-import { Ionicons } from '@expo/vector-icons'; // For icons
-import { useNavigation } from '@react-navigation/native'; // For navigation
+import { View, Text, StyleSheet, ImageBackground, TextInput, Pressable } from 'react-native';
+import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import { Ionicons } from '@expo/vector-icons';
 import icedCoffeeImg from "../assets/images/iced-coffee.png"; // Your background image
 
-export default function SignUpScreen() {
-  const navigation = useNavigation(); // For navigation
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
-  const [isConfirmPasswordVisible, setIsConfirmPasswordVisible] = useState(false);
-  const [email, setEmail] = useState('');
+const SignUp = () => {
   const [password, setPassword] = useState('');
   const [confirmPassword, setConfirmPassword] = useState('');
-  const [passwordMatchStatus, setPasswordMatchStatus] = useState('');
-  const [passwordMatchColor, setPasswordMatchColor] = useState('');
-  const [loginBtnScale, setLoginBtnScale] = useState(new Animated.Value(1));
+  const [passwordVisible, setPasswordVisible] = useState(false);
+  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const handleLoginPressIn = () => {
-    Animated.spring(loginBtnScale, {
-      toValue: 1.1,
-      friction: 3,
-      tension: 150,
-      useNativeDriver: true,
-    }).start();
-  };
+  const navigation = useNavigation(); // Access navigation object
 
-  const handleLoginPressOut = () => {
-    Animated.spring(loginBtnScale, {
-      toValue: 1,
-      friction: 3,
-      tension: 150,
-      useNativeDriver: true,
-    }).start();
-  };
+  // Determine the match status
+  const matchStatus =
+    password && confirmPassword
+      ? password === confirmPassword
+        ? 'Passwords match'
+        : 'Passwords do not match'
+      : '';
 
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible(!isPasswordVisible);
-  };
-
-  const toggleConfirmPasswordVisibility = () => {
-    setIsConfirmPasswordVisible(!isConfirmPasswordVisible);
-  };
-
-  const handleSignUp = () => {
-    if (email && password && confirmPassword) {
-      if (password === confirmPassword) {
-        setPasswordMatchStatus('Passwords match');
-        setPasswordMatchColor('green');
-      } else {
-        setPasswordMatchStatus('Passwords do not match');
-        setPasswordMatchColor('red');
-      }
-    } else {
-      setPasswordMatchStatus(''); // Clear message if fields are empty
-    }
-  };
-
-  const handleGoogleSignUp = () => {
-    console.log('Sign up with Google');
-  };
-
-  const handleFacebookSignUp = () => {
-    console.log('Sign up with Facebook');
-  };
-
-  const handlePhoneSignUp = () => {
-    console.log('Sign up with Phone');
-  };
-
-  // Navigate to Login Screen
+  // Function to navigate to Login page
   const navigateToLogin = () => {
-    navigation.navigate('login'); // This will navigate to the Login screen
-  };
-
-  // Watch for input changes to hide message when fields are empty
-  const handlePasswordChange = (text) => {
-    setPassword(text);
-    if (!text || !confirmPassword) {
-      setPasswordMatchStatus(''); // Clear message when password or confirm password is empty
-    }
-  };
-
-  const handleConfirmPasswordChange = (text) => {
-    setConfirmPassword(text);
-    if (!text || !password) {
-      setPasswordMatchStatus(''); // Clear message when password or confirm password is empty
-    }
+    navigation.navigate('login'); // Navigate to the 'Login' screen
   };
 
   return (
-    <ScrollView contentContainerStyle={styles.scrollView}>
-      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.imageBackground}>
-        <View style={styles.container}>
-          <Text style={styles.title}>Sign Up</Text>
+    <View style={styles.container}>
+      {/* Background Image */}
+      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
+        {/* Title */}
+        <Text style={styles.title}>Sign Up</Text>
 
-          {/* Email Input */}
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
           <TextInput
-            style={styles.input}
             placeholder="Email"
-            placeholderTextColor="#7F7F7F"
-            value={email}
-            onChangeText={setEmail}
-            textAlign="right"
-            writingDirection="rtl"
+            placeholderTextColor="#ccc"
+            style={styles.input}
           />
+        </View>
 
-          {/* Password Input */}
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Password"
-              placeholderTextColor="#7F7F7F"
-              value={password}
-              onChangeText={handlePasswordChange} // Updated this to call the handler
-              secureTextEntry={!isPasswordVisible}
-              textAlign="right"
-              writingDirection="rtl"
-            />
-            <Pressable onPress={togglePasswordVisibility} style={styles.eyeIcon}>
-              <Ionicons
-                name={isPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                size={24}
-                color="#7F7F7F"
-              />
-            </Pressable>
-          </View>
-
-          {/* Confirm Password Input */}
-          <View style={styles.passwordContainer}>
-            <TextInput
-              style={styles.input}
-              placeholder="Confirm Password"
-              placeholderTextColor="#7F7F7F"
-              value={confirmPassword}
-              onChangeText={handleConfirmPasswordChange} // Updated this to call the handler
-              secureTextEntry={!isConfirmPasswordVisible}
-              textAlign="right"
-              writingDirection="rtl"
-            />
-            <Pressable onPress={toggleConfirmPasswordVisibility} style={styles.eyeIcon}>
-              <Ionicons
-                name={isConfirmPasswordVisible ? "eye-off-outline" : "eye-outline"}
-                size={24}
-                color="#7F7F7F"
-              />
-            </Pressable>
-          </View>
-
-          {/* Show password mismatch message */}
-          {passwordMatchStatus && (
-            <Text style={[styles.passwordMatchMessage, { color: passwordMatchColor, backgroundColor: 'white' }]}>
-              {passwordMatchStatus}
-            </Text>
-          )}
-
-          {/* Sign Up Button */}
-          <Animated.View
-            style={[styles.signUpButton, { transform: [{ scale: loginBtnScale }] }] }
-            onTouchStart={handleLoginPressIn}
-            onTouchEnd={handleLoginPressOut}
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#ccc"
+            secureTextEntry={!passwordVisible}
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Pressable
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            style={styles.eyeIcon}
           >
-            <Pressable onPress={handleSignUp} style={styles.button}>
-              <Text style={styles.buttonText}>Sign Up</Text>
-            </Pressable>
-          </Animated.View>
-
-          {/* Google Sign Up Button (Red) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#DB4437' }]} onPress={handleGoogleSignUp}>
-            <Ionicons name="logo-google" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Sign Up with Google</Text>
-          </Pressable>
-
-          {/* Facebook Sign Up Button (Blue) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#3b5998' }]} onPress={handleFacebookSignUp}>
-            <Ionicons name="logo-facebook" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Sign Up with Facebook</Text>
-          </Pressable>
-
-          {/* Phone Sign Up Button (Green) */}
-          <Pressable style={[styles.socialButton, { backgroundColor: '#4CAF50' }]} onPress={handlePhoneSignUp}>
-            <Ionicons name="call-outline" size={24} color="#fff" />
-            <Text style={styles.socialButtonText}>Sign Up with Phone</Text>
-          </Pressable>
-
-          {/* Already have an account? */}
-          <Pressable style={styles.forgotPassword} onPress={navigateToLogin}>
-            <Text style={styles.forgotPasswordText}>Already have an account? Login</Text>
+            <Ionicons
+              name={passwordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color="#ccc"
+            />
           </Pressable>
         </View>
-      </ImageBackground>
-    </ScrollView>
-  );
-}
 
+        {/* Confirm Password Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Confirm Password"
+            placeholderTextColor="#ccc"
+            secureTextEntry={!confirmPasswordVisible}
+            style={styles.input}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <Pressable
+            onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={confirmPasswordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color="#ccc"
+            />
+          </Pressable>
+        </View>
+
+        {/* Match Status */}
+        {matchStatus !== '' && (
+          <View
+            style={[
+              styles.matchStatusContainer,
+              matchStatus === 'Passwords match'
+                ? styles.matchSuccessBackground
+                : styles.matchErrorBackground,
+            ]}
+          >
+            <Text style={styles.matchStatusText}>{matchStatus}</Text>
+          </View>
+        )}
+
+        {/* Sign Up Button */}
+        <Pressable style={[styles.button, styles.signUpButton]}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </Pressable>
+
+        
+        
+
+        {/* Social Buttons */}
+        <Pressable style={[styles.button, styles.googleButton]}>
+          <Ionicons name="logo-google" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Google</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, styles.facebookButton]}>
+          <Ionicons name="logo-facebook" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Facebook</Text>
+        </Pressable>
+
+        <Pressable style={[styles.button, styles.phoneButton]}>
+          <Ionicons name="call" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Phone</Text>
+        </Pressable>
+
+        {/* Links */}
+        <Text style={styles.link}>
+          Already have an account?{' '}
+          <Text style={styles.loginLink} onPress={navigateToLogin}>
+            Login
+          </Text>
+        </Text>
+      </ImageBackground>
+    </View>
+  );
+};
+
+export default SignUp;
+
+// Styles
 const styles = StyleSheet.create({
-  scrollView: {
+  container: {
     flex: 1,
+    flexDirection: 'column',
   },
-  imageBackground: {
+  image: {
+    width: '100%',
+    height: '100%',
     flex: 1,
     justifyContent: 'center',
-    padding: 20,
-    width: '100%',
-    height: '100%', // Ensure full screen coverage
-  },
-  container: {
     alignItems: 'center',
+    padding: 20,
   },
   title: {
-    fontSize: 36,
     color: '#fff',
+    fontSize: 36,
     fontWeight: 'bold',
+    textAlign: 'center',
     marginBottom: 30,
-    textShadowColor: '#000',
+    textShadowColor: 'rgba(0, 0, 0, 0.7)',
     textShadowOffset: { width: 2, height: 2 },
     textShadowRadius: 10,
   },
+  inputContainer: {
+    width: '100%',
+    marginBottom: 15,
+    position: 'relative',
+  },
   input: {
     width: '100%',
-    height: 50,
-    backgroundColor: '#fff',
-    marginBottom: 15,
-    paddingLeft: 15,
-    borderRadius: 10,
+    backgroundColor: 'rgba(113, 51, 51, 0.73)',
+    borderRadius: 25,
+    padding: 15,
+    paddingHorizontal: 20,
+    color: '#fff',
     fontSize: 16,
-  },
-  passwordContainer: {
-    width: '100%',
-    position: 'relative',
+    borderWidth: 1,
+    borderColor: '#fff',
   },
   eyeIcon: {
     position: 'absolute',
-    right: 15,
-    top: 10,
+    right: 20,
+    top: '50%',
+    transform: [{ translateY: -12 }],
   },
-  signUpButton: {
-    width: '100%',
-    marginBottom: 20,
+  matchStatusContainer: {
+    padding: 10,
+    borderRadius: 10,
+    marginBottom: 15,
+  },
+  matchSuccessBackground: {
+    backgroundColor: 'rgba(0, 128, 0, 0.8)',
+  },
+  matchErrorBackground: {
+    backgroundColor: 'rgba(255, 0, 0, 0.8)',
+  },
+  matchStatusText: {
+    color: '#fff',
+    fontSize: 14,
+    fontWeight: 'bold',
+    textAlign: 'center',
   },
   button: {
-    backgroundColor: '#4B2E83',
+    width: '100%',
+    borderRadius: 25,
     paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
-    alignItems: 'center',
-  },
-  buttonText: {
-    color: '#fff',
-    fontSize: 18,
-    fontWeight: 'bold',
-  },
-  socialButton: {
-    paddingVertical: 15,
-    paddingHorizontal: 20,
-    borderRadius: 10,
     flexDirection: 'row',
     alignItems: 'center',
+    justifyContent: 'center',
     marginBottom: 15,
-    width: '80%',  // Ensuring equal width for all buttons
-    alignSelf: 'center',  // Center the buttons horizontally
-    justifyContent: 'center',  // Center the text and icon inside the button
   },
-  socialButtonText: {
+  signUpButton: {
+    backgroundColor: '#6C63FF',
+  },
+  loginButton: {
+    backgroundColor: '#5E35B1',
+  },
+  googleButton: {
+    backgroundColor: '#DB4437',
+  },
+  facebookButton: {
+    backgroundColor: '#4267B2',
+  },
+  phoneButton: {
+    backgroundColor: '#0F9D58',
+  },
+  buttonText: {
     color: '#fff',
     fontSize: 16,
     fontWeight: 'bold',
     marginLeft: 10,
   },
-  forgotPassword: {
-    marginTop: 15,
+  icon: {
+    marginRight: 10,
   },
-  forgotPasswordText: {
+  link: {
     color: '#fff',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-  signupRedirect: {
-    marginTop: 15,
-  },
-  signupRedirectText: {
-    color: '#fff',
-    fontSize: 16,
-    textDecorationLine: 'underline',
-  },
-  passwordMatchMessage: {
     fontSize: 14,
-    marginBottom: 15,
-    padding: 5,
-    borderRadius: 10,
+    marginTop: 10,
+    textAlign: 'center',
+  },
+  loginLink: {
+    fontWeight: 'bold',
+    textDecorationLine: 'underline',
   },
 });
