@@ -104,8 +104,8 @@ const SignUp = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </Pressable>
 
-        
-        
+
+
 
         {/* Social Buttons */}
         <Pressable style={[styles.button, styles.googleButton]}>

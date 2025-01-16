@@ -113,9 +113,11 @@ const styles = StyleSheet.create({
     width: '100%',
     marginBottom: 15,
     position: 'relative',
+    alignItems: "center"
+
   },
   input: {
-    width: '100%',
+    width: '90%',
     backgroundColor: 'rgba(113, 51, 51, 0.73)', // خلفية شفافة قليلاً
     borderRadius: 25,
     padding: 15,
@@ -127,12 +129,12 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 20,
+    right: 30,
     top: '50%',
     transform: [{ translateY: -12 }],
   },
   button: {
-    width: '100%',
+    width: '70%',
     borderRadius: 25,
     paddingVertical: 15,
     flexDirection: 'row',
