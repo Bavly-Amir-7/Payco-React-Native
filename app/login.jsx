@@ -62,7 +62,7 @@ export default function LoginScreen() {
   return (
     <ScrollView contentContainerStyle={styles.scrollView}>
       <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.imageBackground}>
-        <View style={styles.container}>
+        <View >
           <Text style={styles.title}>Login</Text>
 
           {/* Email Input */}
