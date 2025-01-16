@@ -11,11 +11,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context'; // Handle safe areas
-import { BlurView } from 'expo-blur'; // Import BlurView
-import icedCoffeeImg from "../assets/images/iced-coffee.png";
+import icedCoffeeImg from "../assets/images/menu/small-cup-black-coffee-dark-background-with-coffee-beans_155165-7704.avif";
 
 const { height, width } = Dimensions.get('window'); // Get device dimensions
-const isTablet = width > 768; // Define tablet breakpoint
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
@@ -32,8 +30,10 @@ const Login = () => {
         style={styles.image}
         resizeMode="cover"
       >
-        {/* Blur Overlay */}
-        <BlurView intensity={50} style={styles.blurOverlay}>
+        {/* Overlay to darken the background */}
+        <View style={styles.overlay} />
+
+        <View style={styles.wrapper}>
           {/* Title */}
           <Text style={styles.title}>Sign in</Text>
 
@@ -95,7 +95,7 @@ const Login = () => {
               Sign Up
             </Text>
           </Text>
-        </BlurView>
+        </View>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -103,7 +103,6 @@ const Login = () => {
 
 export default Login;
 
-// Styles
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
@@ -112,17 +111,17 @@ const styles = StyleSheet.create({
   image: {
     flex: 1,
     width: '100%',
-    height: height, // Ensure background covers the entire screen
+    height: height, // Cover the entire screen
   },
-  blurOverlay: {
-    position: 'absolute', // Ensure it covers the entire screen
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // Cover the entire screen
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black overlay with 50% opacity
+  },
+  wrapper: {
+    flex: 1,
+    justifyContent: 'center', // Center items vertically
+    alignItems: 'center', // Center items horizontally
+    padding: 20, // Add consistent padding
   },
   title: {
     color: '#fff',
@@ -135,13 +134,13 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   inputContainer: {
-    width: '90%', // Relative width for responsiveness
+    width: '90%', // Keep input responsive
     marginBottom: 15,
-    position: 'relative',
+    alignSelf: 'center',
   },
   input: {
     width: '100%',
-    backgroundColor: 'rgba(113, 51, 51, 0.8)', // Slightly darker background for clarity
+    backgroundColor: 'rgba(53, 27, 27, 0.8)',
     borderRadius: 25,
     padding: 15,
     color: '#fff',
@@ -156,13 +155,14 @@ const styles = StyleSheet.create({
     transform: [{ translateY: -12 }],
   },
   button: {
-    width: '70%', // Relative width for responsiveness
+    width: '70%',
     borderRadius: 25,
     paddingVertical: 15,
     flexDirection: 'row',
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
+    alignSelf: 'center',
   },
   loginButton: {
     backgroundColor: '#6C63FF',

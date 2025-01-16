@@ -9,7 +9,7 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import icedCoffeeImg from "../assets/images/iced-coffee.png";
+import icedCoffeeImg from "../assets/images/menu/coffe-splash-mug-black-background_123827-26338.avif"; // Your background image
 import { Colors } from '@/constants/Colors';
 import { MENU_ITEMS } from '../constants/MenuItems';
 import MenuImages from '../constants/MenuImages';

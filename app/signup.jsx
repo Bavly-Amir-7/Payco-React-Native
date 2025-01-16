@@ -11,11 +11,9 @@ import {
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { SafeAreaView } from 'react-native-safe-area-context'; // Handle safe areas
-import { BlurView } from 'expo-blur'; // Import BlurView
-import icedCoffeeImg from "../assets/images/iced-coffee.png";
+import icedCoffeeImg from "../assets/images/menu/small-cup-black-coffee-dark-background-with-coffee-beans_155165-7704.avif";
 
 const { height, width } = Dimensions.get('window'); // Get device dimensions
-const isTablet = width > 768; // Define tablet breakpoint
 
 const SignUp = () => {
   const [password, setPassword] = useState('');
@@ -40,110 +38,110 @@ const SignUp = () => {
     <SafeAreaView style={styles.safeContainer}>
       <ImageBackground
         source={icedCoffeeImg}
-        style={[styles.image, isTablet && styles.tabletImage]} // Adjust for tablet
+        style={styles.image}
         resizeMode="cover"
       >
-        {/* Blur Overlay */}
-        <BlurView intensity={50} style={styles.blurOverlay}>
-          {/* Title */}
-          <Text style={styles.title}>Sign Up</Text>
+        {/* Overlay to darken the background */}
+        <View style={styles.overlay} />
 
-          {/* Email Input */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Email"
-              placeholderTextColor="#ccc"
-              style={styles.input}
+        {/* Title */}
+        <Text style={styles.title}>Sign Up</Text>
+
+        {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Email"
+            placeholderTextColor="#ccc"
+            style={styles.input}
+          />
+        </View>
+
+        {/* Password Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Password"
+            placeholderTextColor="#ccc"
+            secureTextEntry={!passwordVisible}
+            style={styles.input}
+            value={password}
+            onChangeText={setPassword}
+          />
+          <Pressable
+            onPress={() => setPasswordVisible(!passwordVisible)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={passwordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color="#ccc"
             />
-          </View>
+          </Pressable>
+        </View>
 
-          {/* Password Input */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Password"
-              placeholderTextColor="#ccc"
-              secureTextEntry={!passwordVisible}
-              style={styles.input}
-              value={password}
-              onChangeText={setPassword}
+        {/* Confirm Password Input */}
+        <View style={styles.inputContainer}>
+          <TextInput
+            placeholder="Confirm Password"
+            placeholderTextColor="#ccc"
+            secureTextEntry={!confirmPasswordVisible}
+            style={styles.input}
+            value={confirmPassword}
+            onChangeText={setConfirmPassword}
+          />
+          <Pressable
+            onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
+            style={styles.eyeIcon}
+          >
+            <Ionicons
+              name={confirmPasswordVisible ? 'eye-off' : 'eye'}
+              size={24}
+              color="#ccc"
             />
-            <Pressable
-              onPress={() => setPasswordVisible(!passwordVisible)}
-              style={styles.eyeIcon}
-            >
-              <Ionicons
-                name={passwordVisible ? 'eye-off' : 'eye'}
-                size={24}
-                color="#ccc"
-              />
-            </Pressable>
+          </Pressable>
+        </View>
+
+        {/* Match Status */}
+        {matchStatus !== '' && (
+          <View
+            style={[
+              styles.matchStatusContainer,
+              matchStatus === 'Passwords match'
+                ? styles.matchSuccessBackground
+                : styles.matchErrorBackground,
+            ]}
+          >
+            <Text style={styles.matchStatusText}>{matchStatus}</Text>
           </View>
+        )}
 
-          {/* Confirm Password Input */}
-          <View style={styles.inputContainer}>
-            <TextInput
-              placeholder="Confirm Password"
-              placeholderTextColor="#ccc"
-              secureTextEntry={!confirmPasswordVisible}
-              style={styles.input}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-            <Pressable
-              onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
-              style={styles.eyeIcon}
-            >
-              <Ionicons
-                name={confirmPasswordVisible ? 'eye-off' : 'eye'}
-                size={24}
-                color="#ccc"
-              />
-            </Pressable>
-          </View>
+        {/* Sign Up Button */}
+        <Pressable style={[styles.button, styles.signUpButton]}>
+          <Text style={styles.buttonText}>Sign Up</Text>
+        </Pressable>
 
-          {/* Match Status */}
-          {matchStatus !== '' && (
-            <View
-              style={[
-                styles.matchStatusContainer,
-                matchStatus === 'Passwords match'
-                  ? styles.matchSuccessBackground
-                  : styles.matchErrorBackground,
-              ]}
-            >
-              <Text style={styles.matchStatusText}>{matchStatus}</Text>
-            </View>
-          )}
+        {/* Social Buttons */}
+        <Pressable style={[styles.button, styles.googleButton]}>
+          <Ionicons name="logo-google" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Google</Text>
+        </Pressable>
 
-          {/* Sign Up Button */}
-          <Pressable style={[styles.button, styles.signUpButton]}>
-            <Text style={styles.buttonText}>Sign Up</Text>
-          </Pressable>
+        <Pressable style={[styles.button, styles.facebookButton]}>
+          <Ionicons name="logo-facebook" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Facebook</Text>
+        </Pressable>
 
-          {/* Social Buttons */}
-          <Pressable style={[styles.button, styles.googleButton]}>
-            <Ionicons name="logo-google" size={20} color="#fff" style={styles.icon} />
-            <Text style={styles.buttonText}>Sign Up with Google</Text>
-          </Pressable>
+        <Pressable style={[styles.button, styles.phoneButton]}>
+          <Ionicons name="call" size={20} color="#fff" style={styles.icon} />
+          <Text style={styles.buttonText}>Sign Up with Phone</Text>
+        </Pressable>
 
-          <Pressable style={[styles.button, styles.facebookButton]}>
-            <Ionicons name="logo-facebook" size={20} color="#fff" style={styles.icon} />
-            <Text style={styles.buttonText}>Sign Up with Facebook</Text>
-          </Pressable>
-
-          <Pressable style={[styles.button, styles.phoneButton]}>
-            <Ionicons name="call" size={20} color="#fff" style={styles.icon} />
-            <Text style={styles.buttonText}>Sign Up with Phone</Text>
-          </Pressable>
-
-          {/* Links */}
-          <Text style={styles.link}>
-            Already have an account?{' '}
-            <Text style={styles.loginLink} onPress={navigateToLogin}>
-              Sign in
-            </Text>
+        {/* Links */}
+        <Text style={styles.link}>
+          Already have an account?{' '}
+          <Text style={styles.loginLink} onPress={navigateToLogin}>
+            Sign in
           </Text>
-        </BlurView>
+        </Text>
       </ImageBackground>
     </SafeAreaView>
   );
@@ -151,7 +149,6 @@ const SignUp = () => {
 
 export default SignUp;
 
-// Styles
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
@@ -162,18 +159,9 @@ const styles = StyleSheet.create({
     width: '100%',
     height: height, // Cover the entire screen
   },
-  tabletImage: {
-    height: height + 150, // Extend height for tablets
-  },
-  blurOverlay: {
-    position: 'absolute', // Ensure it covers the entire screen
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    justifyContent: 'center',
-    alignItems: 'center',
-    padding: 20,
+  overlay: {
+    ...StyleSheet.absoluteFillObject, // Cover the entire screen
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Black overlay with 50% opacity
   },
   title: {
     color: '#fff',
@@ -186,13 +174,13 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   inputContainer: {
-    width: '90%', // Keep input responsive
+    width: '90%',
     marginBottom: 15,
-    position: 'relative',
+    alignSelf: 'center',
   },
   input: {
     width: '100%',
-    backgroundColor: 'rgba(113, 51, 51, 0.8)',
+    backgroundColor: 'rgba(53, 27, 27, 0.8)',
     borderRadius: 25,
     padding: 15,
     color: '#fff',
@@ -210,6 +198,7 @@ const styles = StyleSheet.create({
     padding: 10,
     borderRadius: 10,
     marginBottom: 15,
+    alignSelf: 'center',
   },
   matchSuccessBackground: {
     backgroundColor: 'rgba(0, 128, 0, 0.8)',
@@ -231,6 +220,7 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
     marginBottom: 15,
+    alignSelf: 'center',
   },
   signUpButton: {
     backgroundColor: '#6C63FF',
