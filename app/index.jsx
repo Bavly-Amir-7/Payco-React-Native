@@ -10,7 +10,7 @@ const App = () => {
       {/* Background Image */}
       <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
         {/* Title */}
-        <Text style={styles.title}>☕ Welcome to Our Coffee World</Text>
+        <Text style={styles.title}> Welcome to Our Coffee World ☕</Text>
 
         {/* Buttons with Icons */}
         <Link href="/login" asChild>
@@ -19,12 +19,7 @@ const App = () => {
             <Text style={styles.buttonText}>Login</Text>
           </Pressable>
         </Link>
-        <Link href="/login2" asChild>
-          <Pressable style={styles.roundButton}>
-            <Ionicons name="person" size={24} color="#efbf04" />
-            <Text style={styles.buttonText}>Login2</Text>
-          </Pressable>
-        </Link>
+     
 
         <Link href="/signup" asChild>
           <Pressable style={styles.roundButton}>

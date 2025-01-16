@@ -1,8 +1,20 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TextInput, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TextInput,
+  Pressable,
+  Dimensions,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import icedCoffeeImg from "../assets/images/iced-coffee.png"; // Your background image
+import { SafeAreaView } from 'react-native-safe-area-context'; // Handle safe areas
+import icedCoffeeImg from "../assets/images/iced-coffee.png";
+
+const { height, width } = Dimensions.get('window'); // Get device dimensions
+const isTablet = width > 768; // Define tablet breakpoint
 
 const SignUp = () => {
   const [password, setPassword] = useState('');
@@ -10,9 +22,8 @@ const SignUp = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
 
-  const navigation = useNavigation(); // Access navigation object
+  const navigation = useNavigation();
 
-  // Determine the match status
   const matchStatus =
     password && confirmPassword
       ? password === confirmPassword
@@ -20,15 +31,17 @@ const SignUp = () => {
         : 'Passwords do not match'
       : '';
 
-  // Function to navigate to Login page
   const navigateToLogin = () => {
-    navigation.navigate('login'); // Navigate to the 'Login' screen
+    navigation.navigate('login');
   };
 
   return (
-    <View style={styles.container}>
-      {/* Background Image */}
-      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
+    <SafeAreaView style={styles.safeContainer}>
+      <ImageBackground
+        source={icedCoffeeImg}
+        style={[styles.image, isTablet && styles.tabletImage]} // Adjust for tablet
+        resizeMode="cover"
+      >
         {/* Title */}
         <Text style={styles.title}>Sign Up</Text>
 
@@ -104,9 +117,6 @@ const SignUp = () => {
           <Text style={styles.buttonText}>Sign Up</Text>
         </Pressable>
 
-
-
-
         {/* Social Buttons */}
         <Pressable style={[styles.button, styles.googleButton]}>
           <Ionicons name="logo-google" size={20} color="#fff" style={styles.icon} />
@@ -131,7 +141,7 @@ const SignUp = () => {
           </Text>
         </Text>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -139,17 +149,19 @@ export default SignUp;
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
-    flexDirection: 'column',
+    backgroundColor: '#000', // Ensure background color for safe areas
   },
   image: {
-    width: '100%',
-    height: '100%',
     flex: 1,
+    width: '100%',
+    height: height, // Cover the entire screen
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+  },
+  tabletImage: {
+    height: height + 100, // Extend height for tablets
   },
   title: {
     color: '#fff',
@@ -162,16 +174,15 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   inputContainer: {
-    width: '100%',
+    width: '90%', // Keep input responsive
     marginBottom: 15,
     position: 'relative',
   },
   input: {
     width: '100%',
-    backgroundColor: 'rgba(113, 51, 51, 0.73)',
+    backgroundColor: 'rgba(113, 51, 51, 0.8)',
     borderRadius: 25,
     padding: 15,
-    paddingHorizontal: 20,
     color: '#fff',
     fontSize: 16,
     borderWidth: 1,
@@ -179,7 +190,7 @@ const styles = StyleSheet.create({
   },
   eyeIcon: {
     position: 'absolute',
-    right: 20,
+    right: 15,
     top: '50%',
     transform: [{ translateY: -12 }],
   },
@@ -201,7 +212,7 @@ const styles = StyleSheet.create({
     textAlign: 'center',
   },
   button: {
-    width: '100%',
+    width: '70%',
     borderRadius: 25,
     paddingVertical: 15,
     flexDirection: 'row',
@@ -211,9 +222,6 @@ const styles = StyleSheet.create({
   },
   signUpButton: {
     backgroundColor: '#6C63FF',
-  },
-  loginButton: {
-    backgroundColor: '#5E35B1',
   },
   googleButton: {
     backgroundColor: '#DB4437',

@@ -1,22 +1,36 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, TextInput, Pressable } from 'react-native';
-import { useNavigation } from '@react-navigation/native'; // Import navigation hook
+import {
+  View,
+  Text,
+  StyleSheet,
+  ImageBackground,
+  TextInput,
+  Pressable,
+  Dimensions,
+} from 'react-native';
+import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
-import icedCoffeeImg from "../assets/images/iced-coffee.png"; // Your background image
+import { SafeAreaView } from 'react-native-safe-area-context'; // Handle safe areas
+import icedCoffeeImg from "../assets/images/iced-coffee.png";
+
+const { height, width } = Dimensions.get('window'); // Get device dimensions
+const isTablet = width > 768; // Define tablet breakpoint
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
-  const navigation = useNavigation(); // Access navigation object
+  const navigation = useNavigation();
 
-  // Function to navigate to the SignUp page
   const navigateToSignUp = () => {
-    navigation.navigate('signup'); // Navigate to the 'SignUp' screen
+    navigation.navigate('signup');
   };
 
   return (
-    <View style={styles.container}>
-      {/* Background Image */}
-      <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.image}>
+    <SafeAreaView style={styles.safeContainer}>
+      <ImageBackground
+        source={icedCoffeeImg}
+        style={[styles.image, isTablet && styles.tabletImage]} // Apply tablet-specific styles
+        resizeMode="cover"
+      >
         {/* Title */}
         <Text style={styles.title}>Login</Text>
 
@@ -79,7 +93,7 @@ const Login = () => {
           </Text>
         </Text>
       </ImageBackground>
-    </View>
+    </SafeAreaView>
   );
 };
 
@@ -87,17 +101,19 @@ export default Login;
 
 // Styles
 const styles = StyleSheet.create({
-  container: {
+  safeContainer: {
     flex: 1,
-    flexDirection: 'column',
+    backgroundColor: '#000', // Ensure background color for safe areas
   },
   image: {
-    width: '100%',
-    height: '100%',
     flex: 1,
+    width: '100%',
+    height: height, // Ensure background covers the entire screen
     justifyContent: 'center',
     alignItems: 'center',
-    padding: 20,
+  },
+  tabletImage: {
+    height: height + 100, // Extend background height for tablets
   },
   title: {
     color: '#fff',
@@ -110,31 +126,28 @@ const styles = StyleSheet.create({
     textShadowRadius: 10,
   },
   inputContainer: {
-    width: '100%',
+    width: '90%', // Relative width for responsiveness
     marginBottom: 15,
     position: 'relative',
-    alignItems: "center"
-
   },
   input: {
-    width: '90%',
-    backgroundColor: 'rgba(113, 51, 51, 0.73)', // خلفية شفافة قليلاً
+    width: '100%',
+    backgroundColor: 'rgba(113, 51, 51, 0.8)', // Slightly darker background for clarity
     borderRadius: 25,
     padding: 15,
-    paddingHorizontal: 20,
     color: '#fff',
     fontSize: 16,
-    borderWidth: 1, // حدود واضحة
+    borderWidth: 1,
     borderColor: '#fff',
   },
   eyeIcon: {
     position: 'absolute',
-    right: 30,
+    right: 15,
     top: '50%',
     transform: [{ translateY: -12 }],
   },
   button: {
-    width: '70%',
+    width: '70%', // Relative width for responsiveness
     borderRadius: 25,
     paddingVertical: 15,
     flexDirection: 'row',
