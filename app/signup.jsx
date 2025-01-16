@@ -161,14 +161,12 @@ const styles = StyleSheet.create({
     flex: 1,
     width: '100%',
     height: height, // Cover the entire screen
-    justifyContent: 'center',
-    alignItems: 'center',
   },
   tabletImage: {
     height: height + 100, // Extend height for tablets
   },
   blurOverlay: {
-    flex: 1,
+    flex: 1, // Ensure it covers the entire screen
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',

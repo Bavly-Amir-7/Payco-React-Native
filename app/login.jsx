@@ -120,7 +120,7 @@ const styles = StyleSheet.create({
     height: height + 100, // Extend background height for tablets
   },
   blurOverlay: {
-    flex: 1,
+    flex: 1, // Ensure blur covers the entire screen
     width: '100%',
     justifyContent: 'center',
     alignItems: 'center',
