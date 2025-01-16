@@ -16,7 +16,7 @@ const App = () => {
         <Link href="/login" asChild>
           <Pressable style={styles.roundButton}>
             <Ionicons name="person" size={24} color="#efbf04" />
-            <Text style={styles.buttonText}>Login</Text>
+            <Text style={styles.buttonText}>Sign in</Text>
           </Pressable>
         </Link>
      
