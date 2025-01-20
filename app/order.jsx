@@ -9,15 +9,40 @@ import {
   FlatList,
   Image,
 } from 'react-native';
-import icedCoffeeImg from "../assets/images/menu/coffe-splash-mug-black-background_123827-26338.avif"; // Your background image
+import icedCoffeeImg from "../assets/images/menu/coffe-splash-mug-black-background_123827-26338.avif"; // Background image
 import { Colors } from '@/constants/Colors';
 import { MENU_ITEMS } from '../constants/MenuItems';
 import MenuImages from '../constants/MenuImages';
+import { Ionicons } from '@expo/vector-icons'; // For the language toggle icon
 import { useNavigation } from '@react-navigation/native';
 
 export default function OrderScreen() {
   const [orderCount, setOrderCount] = useState({});
+  const [language, setLanguage] = useState('en'); // State for language toggle
   const navigation = useNavigation();
+
+  const toggleLanguage = () => {
+    setLanguage((prev) => (prev === 'en' ? 'ar' : 'en'));
+  };
+
+  const translations = {
+    en: {
+      confirmOrder: 'Confirm Order',
+      ordered: 'Ordered',
+      add: 'Add',
+      remove: 'Remove',
+      alert: 'Please add items to your order before confirming!',
+    },
+    ar: {
+      confirmOrder: 'تأكيد الطلب',
+      ordered: 'الكمية المطلوبة',
+      add: 'إضافة',
+      remove: 'إزالة',
+      alert: 'يرجى إضافة عناصر إلى طلبك قبل التأكيد!',
+    },
+  };
+
+  const t = translations[language];
 
   // Handle adding items to the order
   const addItem = (itemId) => {
@@ -41,25 +66,30 @@ export default function OrderScreen() {
   const handleConfirmOrder = () => {
     const orderDetails = MENU_ITEMS.filter((item) => orderCount[item.id] > 0).map((item) => ({
       id: item.id,
-      title: item.title,
-      description: item.description,
+      title: language === 'ar' ? item.title_ar : item.title,
+      description: language === 'ar' ? item.description_ar : item.description,
       count: orderCount[item.id],
     }));
 
     if (orderDetails.length > 0) {
-      console.log('Navigating to Cart with Order:', orderDetails);
       navigation.navigate('cart', { order: orderDetails });
     } else {
-      alert('Please add items to your order before confirming!');
+      alert(t.alert);
     }
   };
 
   const theme = Colors.light;
-  const styles = createStyles(theme);
+  const styles = createStyles(theme, language);
 
   return (
     <ScrollView>
       <ImageBackground source={icedCoffeeImg} resizeMode="cover" style={styles.imageBackground}>
+        {/* Language Toggle */}
+        <Pressable style={styles.languageButton} onPress={toggleLanguage}>
+          <Ionicons name="globe" size={24} color="#fff" />
+          <Text style={styles.languageText}>{language === 'en' ? 'العربية' : 'English'}</Text>
+        </Pressable>
+
         <FlatList
           data={MENU_ITEMS}
           keyExtractor={(item) => item.id.toString()}
@@ -69,15 +99,21 @@ export default function OrderScreen() {
             <View style={styles.card}>
               <Image source={MenuImages[item.id - 1]} style={styles.cardImage} />
               <View style={styles.cardContent}>
-                <Text style={styles.cardTitle}>{item.title}</Text>
-                <Text style={styles.cardDescription}>{item.description}</Text>
-                <Text style={styles.orderCount}>Ordered: {orderCount[item.id] || 0}</Text>
+                <Text style={styles.cardTitle}>
+                  {language === 'ar' ? item.title_ar : item.title}
+                </Text>
+                <Text style={styles.cardDescription}>
+                  {language === 'ar' ? item.description_ar : item.description}
+                </Text>
+                <Text style={styles.orderCount}>
+                  {t.ordered}: {orderCount[item.id] || 0}
+                </Text>
                 <View style={styles.buttonGroup}>
                   <Pressable style={styles.addButton} onPress={() => addItem(item.id)}>
-                    <Text style={styles.addButtonText}>Add</Text>
+                    <Text style={styles.addButtonText}>{t.add}</Text>
                   </Pressable>
                   <Pressable style={styles.removeButton} onPress={() => removeItem(item.id)}>
-                    <Text style={styles.removeButtonText}>Remove</Text>
+                    <Text style={styles.removeButtonText}>{t.remove}</Text>
                   </Pressable>
                 </View>
               </View>
@@ -85,14 +121,14 @@ export default function OrderScreen() {
           )}
         />
         <Pressable style={styles.confirmButton} onPress={handleConfirmOrder}>
-          <Text style={styles.confirmButtonText}>Confirm Order</Text>
+          <Text style={styles.confirmButtonText}>{t.confirmOrder}</Text>
         </Pressable>
       </ImageBackground>
     </ScrollView>
   );
 }
 
-function createStyles(theme) {
+function createStyles(theme, language) {
   return StyleSheet.create({
     imageBackground: {
       width: '100%',
@@ -115,7 +151,7 @@ function createStyles(theme) {
       shadowRadius: 5,
       elevation: 6,
       overflow: 'hidden',
-      flexDirection: 'row',
+      flexDirection: language === 'ar' ? 'row-reverse' : 'row',
       padding: 10,
     },
     cardImage: {
@@ -132,16 +168,19 @@ function createStyles(theme) {
       fontWeight: 'bold',
       color: '#4B2E83',
       marginBottom: 5,
+      textAlign: language === 'ar' ? 'right' : 'left',
     },
     cardDescription: {
       fontSize: 16,
       color: '#6B4F4F',
       marginBottom: 10,
+      textAlign: language === 'ar' ? 'right' : 'left',
     },
     orderCount: {
       fontSize: 16,
       color: '#4B2E83',
       marginBottom: 10,
+      textAlign: language === 'ar' ? 'right' : 'left',
     },
     buttonGroup: {
       flexDirection: 'row',
@@ -181,6 +220,25 @@ function createStyles(theme) {
       color: '#FFFFFF',
       fontSize: 18,
       textAlign: 'center',
+    },
+    languageButton: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      padding: 10,
+      backgroundColor: '#333',
+      borderRadius: 50,
+      margin: 10,
+      alignSelf: 'flex-end',
+      shadowColor: '#000',
+      shadowOpacity: 0.25,
+      shadowRadius: 4,
+      elevation: 5,
+    },
+    languageText: {
+      color: '#fff',
+      fontSize: 16,
+      fontWeight: 'bold',
+      marginLeft: 5,
     },
   });
 }

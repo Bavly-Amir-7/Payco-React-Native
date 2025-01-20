@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import {
     View,
     Text,
@@ -12,52 +12,73 @@ import {
     FlatList,
     Image,
 } from 'react-native';
+import { Ionicons } from '@expo/vector-icons'; // For the language toggle icon
 import { Colors } from '@/constants/Colors';
 import { MENU_ITEMS } from '../constants/MenuItems';
 import MenuImages from '../constants/MenuImages'; // Ensure correct import of MenuImages
 
 export default function MenuScreen() {
-    // Get the color scheme (light or dark) from the device settings
-    const colorScheme = Appearance.getColorScheme();
+    const [language, setLanguage] = useState('en'); // State for language toggle
 
-    // Determine the theme based on the color scheme
+    const toggleLanguage = () => {
+        setLanguage((prev) => (prev === 'en' ? 'ar' : 'en'));
+    };
+
+    // Translations for English and Arabic
+    const translations = {
+        en: {
+            footer: "End Of Menu",
+            noItems: "No Items",
+        },
+        ar: {
+            footer: "نهاية القائمة",
+            noItems: "لا توجد عناصر",
+        },
+    };
+
+    const t = translations[language];
+
+    const colorScheme = Appearance.getColorScheme();
     const theme = colorScheme === 'dark' ? Colors.dark : Colors.light;
 
-    // Create styles based on the theme and color scheme
-    const styles = createStyles(theme, colorScheme);
+    const styles = createStyles(theme, colorScheme, language);
 
-    // Use ScrollView for web and SafeAreaView for other platforms
     const Container = Platform.OS === 'web' ? ScrollView : SafeAreaView;
 
-    // Separator component for list items
     const separatorComp = <View style={styles.separator} />;
-
-    // Footer component for the list
-    const footerComp = <Text style={styles.footerText}>End Of Menu</Text>;
+    const footerComp = <Text style={styles.footerText}>{t.footer}</Text>;
 
     return (
-        <Container>
+        <Container style={styles.screenBackground}>
+            {/* Language Toggle */}
+            <Pressable
+                style={styles.languageButton}
+                onPress={toggleLanguage}
+            >
+                <Ionicons name="globe" size={24} color="#fff" />
+                <Text style={styles.languageText}>{language === 'en' ? 'العربية' : 'English'}</Text>
+      
+            </Pressable>
+
             <FlatList
-                // Use the MENU_ITEMS array as the data source
                 data={MENU_ITEMS}
-                // Set a unique key for each item
                 keyExtractor={(item) => item.id.toString()}
                 showsVerticalScrollIndicator={false}
                 contentContainerStyle={styles.contentContainer}
                 ItemSeparatorComponent={() => separatorComp}
                 ListFooterComponent={footerComp}
                 ListFooterComponentStyle={styles.footerComp}
-                ListEmptyComponent={<Text>No Items</Text>}
-                // Render each item in the list
+                ListEmptyComponent={<Text>{t.noItems}</Text>}
                 renderItem={({ item }) => (
                     <View style={styles.row}>
                         <View style={styles.menuTextRow}>
-                            {/* Display the title of the menu item */}
-                            <Text style={[styles.menuItemTitle, styles.menuItemText]}>{item.title}</Text>
-                            {/* Display the description of the menu item */}
-                            <Text style={styles.menuItemText}>{item.description}</Text>
+                            <Text style={[styles.menuItemTitle, styles.menuItemText]}>
+                                {language === 'ar' ? item.title_ar : item.title}
+                            </Text>
+                            <Text style={styles.menuItemText}>
+                                {language === 'ar' ? item.description_ar : item.description}
+                            </Text>
                         </View>
-                        {/* Display the image corresponding to the menu item */}
                         <Image
                             source={MenuImages[item.id - 1]}
                             style={styles.menuImage}
@@ -69,9 +90,13 @@ export default function MenuScreen() {
     );
 }
 
-// Function to create styles based on the theme and color scheme
-function createStyles(theme, colorScheme) {
+// Function to create styles based on the theme, color scheme, and language
+function createStyles(theme, colorScheme, language) {
     return StyleSheet.create({
+        screenBackground: {
+            backgroundColor: theme.background, // Add background color for the screen
+            flex: 1,
+        },
         contentContainer: {
             paddingTop: 10,
             paddingBottom: 20,
@@ -97,7 +122,7 @@ function createStyles(theme, colorScheme) {
             marginVertical: 10,
         },
         row: {
-            flexDirection: 'row',
+            flexDirection: language === 'ar' ? 'row-reverse' : 'row',
             width: '100%',
             maxWidth: 600,
             height: 100,
@@ -112,8 +137,7 @@ function createStyles(theme, colorScheme) {
         menuTextRow: {
             width: '65%',
             paddingTop: 10,
-            paddingLeft: 10,
-            paddingRight: 5,
+            paddingHorizontal: 10,
             flexGrow: 1,
         },
         menuItemTitle: {
@@ -122,11 +146,31 @@ function createStyles(theme, colorScheme) {
         },
         menuItemText: {
             color: theme.text,
+            textAlign: language === 'ar' ? 'right' : 'left',
         },
         menuImage: {
             width: 100,
             height: 100,
             borderRadius: 10,
+        },
+        languageButton: {
+            flexDirection: 'row',
+            alignItems: 'center',
+            padding: 10,
+            backgroundColor: '#333', // Darker background color for the button
+            borderRadius: 50,
+            margin: 10,
+            alignSelf: 'flex-end',
+            shadowColor: '#000',
+            shadowOpacity: 0.25,
+            shadowRadius: 4,
+            elevation: 5,
+        },
+        languageText: {
+            color: '#fff', // White text color
+            fontSize: 16,
+            fontWeight: 'bold',
+            marginLeft: 5,
         },
     });
 }
