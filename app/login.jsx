@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState } from "react";
 import {
   View,
   Text,
@@ -7,19 +7,18 @@ import {
   TextInput,
   Pressable,
   Dimensions,
-} from 'react-native';
-import { Ionicons } from '@expo/vector-icons';
-import { SafeAreaView } from 'react-native-safe-area-context';
-import { useNavigation } from '@react-navigation/native';
+} from "react-native";
+import { Ionicons } from "@expo/vector-icons";
+import { SafeAreaView } from "react-native-safe-area-context";
 import icedCoffeeImg from "../assets/images/menu/small-cup-black-coffee-dark-background-with-coffee-beans_155165-7704.avif";
+import { useNavigation } from "@react-navigation/native";
 
-const { height } = Dimensions.get('window');
+
+const { height } = Dimensions.get("window");
 
 const Login = () => {
   const [passwordVisible, setPasswordVisible] = useState(false);
   const [language, setLanguage] = useState("en");
-
-  const navigation = useNavigation();
 
   const toggleLanguage = () => {
     setLanguage((prev) => (prev === "en" ? "ar" : "en"));
@@ -43,9 +42,9 @@ const Login = () => {
       emailPlaceholder: "البريد الإلكتروني",
       passwordPlaceholder: "كلمة المرور",
       loginButton: "تسجيل الدخول",
-      googleButton: "تسجيل الدخول باستخدام Google",
-      facebookButton: "تسجيل الدخول باستخدام Facebook",
-      phoneButton: "تسجيل الدخول باستخدام الهاتف",
+      googleButton: "تسجيل الدخول عبر جوحل",
+      facebookButton: "تسجيل الدخول عبر فيسبوك",
+      phoneButton: "تسجيل الدخول عبر الهاتف",
       forgotPassword: "هل نسيت كلمة المرور؟",
       dontHaveAccount: "ليس لديك حساب؟",
       signUpLink: "إنشاء حساب",
@@ -53,6 +52,9 @@ const Login = () => {
   };
 
   const t = translations[language];
+
+  const navigation = useNavigation();
+
 
   return (
     <SafeAreaView style={styles.safeContainer}>
@@ -63,31 +65,27 @@ const Login = () => {
       >
         <View style={styles.overlay} />
 
-        {/* Language Toggle */}
-        <Pressable
-          style={[
-            styles.languageButton,
-            language === "ar" && styles.languageButtonAr,
-          ]}
-          onPress={toggleLanguage}
-        >
-          <Ionicons name="globe" size={24} color="#efbf04" />
-                  <Text style={styles.languageText}>{language === 'en' ? 'العربية' : 'English'}</Text>
-        
-        </Pressable>
+        {/* Header */}
+        <View style={[styles.header, language === "ar" && styles.headerAr]}>
+          <Text style={[styles.title, language === "ar" && styles.textRight]}>
+            {t.title}
+          </Text>
+          <Pressable
+            style={[
+              styles.languageButton,
+              language === "ar" && styles.languageButtonAr,
+            ]}
+            onPress={toggleLanguage}
+          >
+            <Ionicons name="globe" size={24} color="#efbf04" />
+            <Text style={styles.languageText}>
+              {language === "en" ? "العربية" : "English"}
+            </Text>
+          </Pressable>
+        </View>
 
         {/* Content Wrapper */}
         <View style={styles.wrapper}>
-          {/* Title */}
-          <Text
-            style={[
-              styles.title,
-              language === "ar" ? styles.textRight : styles.textLeft,
-            ]}
-          >
-            {t.title}
-          </Text>
-
           {/* Email Input */}
           <View style={styles.inputWrapper}>
             <TextInput
@@ -127,28 +125,39 @@ const Login = () => {
           </View>
 
           {/* Login Button */}
-     
-
-          <Pressable style={styles.signUpButton}>
+          <Pressable style={styles.loginButton}>
             <Text style={styles.buttonText}>{t.loginButton}</Text>
           </Pressable>
 
-
-
           {/* Social Buttons */}
-          <Pressable style={[styles.button, styles.googleButton]}>
-            <Ionicons name="logo-google" size={20} color="#fff" />
+          <Pressable
+            style={[
+              styles.googleButton,
+              language === "ar" && styles.buttonRTL,
+            ]}
+          >
             <Text style={styles.buttonText}>{t.googleButton}</Text>
+            <Ionicons name="logo-google" size={20} color="#fff" />
           </Pressable>
 
-          <Pressable style={[styles.button, styles.facebookButton]}>
-            <Ionicons name="logo-facebook" size={20} color="#fff" />
+          <Pressable
+            style={[
+              styles.facebookButton,
+              language === "ar" && styles.buttonRTL,
+            ]}
+          >
             <Text style={styles.buttonText}>{t.facebookButton}</Text>
+            <Ionicons name="logo-facebook" size={20} color="#fff" />
           </Pressable>
 
-          <Pressable style={[styles.button, styles.phoneButton]}>
-            <Ionicons name="call" size={20} color="#fff" />
+          <Pressable
+            style={[
+              styles.phoneButton,
+              language === "ar" && styles.buttonRTL,
+            ]}
+          >
             <Text style={styles.buttonText}>{t.phoneButton}</Text>
+            <Ionicons name="call" size={20} color="#fff" />
           </Pressable>
 
           {/* Links */}
@@ -172,81 +181,77 @@ export default Login;
 const styles = StyleSheet.create({
   safeContainer: {
     flex: 1,
-    backgroundColor: '#000',
+    backgroundColor: "#000",
   },
   image: {
     flex: 1,
-    width: '100%',
+    width: "100%",
     height: height,
   },
   overlay: {
     ...StyleSheet.absoluteFillObject,
-    backgroundColor: 'rgba(0, 0, 0, 0.5)',
+    backgroundColor: "rgba(0, 0, 0, 0.5)",
+  },
+  header: {
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "space-between",
+    paddingHorizontal: 20,
+    marginTop: 20,
+  },
+  headerAr: {
+    flexDirection: "row-reverse",
   },
   languageButton: {
-    position: 'absolute',
-    top: 20,
-    right: 15,
-    flexDirection: 'row',
-    alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)',
+    flexDirection: "row",
+    alignItems: "center",
+    backgroundColor: "rgba(0, 0, 0, 0.8)",
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 50,
-    zIndex: 1000,
-  },
-  languageButtonAr: {
-    right: 'auto',
-    left: 15,
   },
   languageText: {
-    color: '#efbf04',
+    color: "#efbf04",
     fontSize: 16,
-    fontWeight: 'bold',
+    fontWeight: "bold",
     marginLeft: 8,
   },
   title: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 36,
-    fontWeight: 'bold',
-    marginBottom: 30,
-    textAlign: 'center',
-    textShadowColor: 'rgba(0, 0, 0, 0.7)',
-    textShadowOffset: { width: 2, height: 2 },
-    textShadowRadius: 10,
-  },
-  textLeft: {
-    textAlign: 'left',
-    alignSelf: 'flex-start',
-    marginLeft: 20,
+    fontWeight: "bold",
+    textAlign: "center",
   },
   textRight: {
-    textAlign: 'right',
-    direction: 'rtl',
+    textAlign: "right",
+  },
+  wrapper: {
+    flex: 1,
+    justifyContent: "center",
+    paddingHorizontal: 20,
   },
   inputWrapper: {
-    position: 'relative',
-    width: '90%',
+    position: "relative",
+    width: "100%",
     marginBottom: 15,
-    alignSelf: 'center',
   },
   input: {
-    width: '100%',
-    backgroundColor: 'rgba(29, 21, 21, 0.8)',
+    width: "100%",
+    backgroundColor: "rgba(29, 21, 21, 0.8)",
     borderRadius: 25,
     paddingVertical: 15,
     paddingHorizontal: 15,
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
     borderWidth: 1,
-    borderColor: '#fff',
+    borderColor: "#fff",
   },
   inputRight: {
-    textAlign: 'right',
+    textAlign: "right",
   },
   iconInsideInput: {
-    position: 'absolute',
-    top: '50%',
+    position: "absolute",
+    top: "50%",
     transform: [{ translateY: -12 }],
   },
   iconRight: {
@@ -255,84 +260,66 @@ const styles = StyleSheet.create({
   iconLeft: {
     left: 15,
   },
-  matchStatusContainer: {
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: 'center',
-    marginTop: 10,
-  },
-  matchSuccessBackground: {
-    backgroundColor: 'rgba(0, 128, 0, 0.8)',
-  },
-  matchErrorBackground: {
-    backgroundColor: 'rgba(255, 0, 0, 0.8)',
-  },
-  matchStatusText: {
-    color: '#fff',
-    fontSize: 14,
-    fontWeight: 'bold',
-    textAlign: 'center',
-  },
-  signUpButton: {
-    width: '70%',
+  loginButton: {
+    width: "70%",
     borderRadius: 25,
-    alignSelf: "center",
     alignItems: "center",
+    justifyContent: "center",
     paddingVertical: 15,
-    backgroundColor: '#6C63FF',
-    alignSelf: 'center',
+    backgroundColor: "#6C63FF",
+    alignSelf: "center",
     marginTop: 20,
   },
   googleButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#DB4437',
-    width: '70%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#DB4437",
+    width: "70%",
     borderRadius: 25,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center", // يضمن أن الزر في المنتصف
     marginTop: 15,
   },
   facebookButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#4267B2',
-    width: '70%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#4267B2",
+    width: "70%",
     borderRadius: 25,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center", // يضمن أن الزر في المنتصف
     marginTop: 15,
   },
   phoneButton: {
-    flexDirection: 'row',
-    alignItems: 'center',
-    justifyContent: 'center',
-    backgroundColor: '#0F9D58',
-    width: '70%',
+    flexDirection: "row",
+    alignItems: "center",
+    justifyContent: "center",
+    backgroundColor: "#0F9D58",
+    width: "70%",
     borderRadius: 25,
     paddingVertical: 15,
-    alignSelf: 'center',
+    alignSelf: "center", // يضمن أن الزر في المنتصف
     marginTop: 15,
   },
+  buttonRTL: {
+    flexDirection: "row-reverse",
+  },
   buttonText: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 16,
-    fontWeight: 'bold',
-    marginLeft: 10,
+    fontWeight: "bold",
+    marginHorizontal: 8,
   },
   link: {
-    color: '#fff',
+    color: "#fff",
     fontSize: 14,
     marginTop: 20,
-    textAlign: 'center',
+    textAlign: "center",
   },
-  centeredLink: {
-    textAlign: 'center',
-  },
-  loginLink: {
-    fontWeight: 'bold',
-    textDecorationLine: 'underline',
+  signUpLink: {
+    fontWeight: "bold",
+    textDecorationLine: "underline",
   },
 });
