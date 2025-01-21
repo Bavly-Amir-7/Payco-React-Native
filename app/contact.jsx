@@ -1,7 +1,8 @@
 import React, { useState } from 'react';
-import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Linking } from 'react-native';
+import { View, Text, StyleSheet, ImageBackground, ScrollView, TouchableOpacity, Linking, Image } from 'react-native';
 import Icon from 'react-native-vector-icons/FontAwesome';
 import icedCoffeeImg from "../assets/images/iced-coffee.png";
+import xIcon from "../assets/images/menu/2fb909b74a854f0715e64dda5825990d-removebg-preview.png"; 
 
 const Details = () => {
   const [language, setLanguage] = useState("en"); // State to store the current language
@@ -72,48 +73,69 @@ const Details = () => {
         {/* Language Toggle Icon */}
         <TouchableOpacity style={styles.languageButton} onPress={toggleLanguage}>
           <Icon name="globe" size={24} color="#efbf04" />
-               <Text style={styles.languageText}>{language === 'en' ? 'العربية' : 'English'}</Text>
-     
+          <Text style={styles.languageText}>{language === 'en' ? 'العربية' : 'English'}</Text>
         </TouchableOpacity>
 
         {/* Scrollable Content */}
         <ScrollView contentContainerStyle={styles.detailsBox}>
           {/* Title Section */}
-          <Text style={styles.title}>{translations[language].title}</Text>
+          <Text style={[styles.title, language === 'ar' && styles.rtlText]}>
+            {translations[language].title}
+          </Text>
 
           {/* Contact Details */}
-          <Text style={styles.detail}>{translations[language].address}</Text>
-          <Text style={styles.detail}>{translations[language].city}</Text>
-          <Text style={styles.detail}>{translations[language].phone}</Text>
-          <Text style={styles.detail}>{translations[language].email}</Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].address}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].city}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].phone}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].email}
+          </Text>
 
           {/* Divider */}
           <View style={styles.divider} />
 
           {/* About Us Section */}
-          <Text style={styles.subtitle}>{translations[language].aboutUs}</Text>
-          <Text style={styles.detail}>{translations[language].aboutText}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].aboutUs}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].aboutText}
+          </Text>
 
           {/* Divider */}
           <View style={styles.divider} />
 
           {/* Working Hours Section */}
-          <Text style={styles.subtitle}>{translations[language].workingHours}</Text>
-          <Text style={styles.detail}>{translations[language].weekdays}</Text>
-          <Text style={styles.detail}>{translations[language].weekends}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].workingHours}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].weekdays}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].weekends}
+          </Text>
 
           {/* Divider */}
           <View style={styles.divider} />
 
           {/* Social Media Section */}
-          <Text style={styles.subtitle}>{translations[language].followUs}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].followUs}
+          </Text>
           <View style={styles.socialIcons}>
             <TouchableOpacity onPress={() => Linking.openURL('https://www.facebook.com/bavly.amir.35')}>
               <Icon name="facebook" size={40} color="#3b5998" style={styles.icon} />
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => Linking.openURL('https://x.com/Bavly_Amir')}>
-              <Icon name="twitter" size={40} color="#1DA1F2" style={styles.icon} />
+              <Image source={xIcon} style={styles.xIcon} /> {/* أيقونة X */}
             </TouchableOpacity>
 
             <TouchableOpacity onPress={() => Linking.openURL('https://www.instagram.com/illll_bavly_illll/')}>
@@ -133,26 +155,46 @@ const Details = () => {
           <View style={styles.divider} />
 
           {/* Services Section */}
-          <Text style={styles.subtitle}>{translations[language].services}</Text>
-          <Text style={styles.detail}>{translations[language].homeDelivery}</Text>
-          <Text style={styles.detail}>{translations[language].dineIn}</Text>
-          <Text style={styles.detail}>{translations[language].onlineOrders}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].services}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].homeDelivery}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].dineIn}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].onlineOrders}
+          </Text>
 
           {/* Divider */}
           <View style={styles.divider} />
 
           {/* Payment Methods Section */}
-          <Text style={styles.subtitle}>{translations[language].paymentMethods}</Text>
-          <Text style={styles.detail}>{translations[language].creditCards}</Text>
-          <Text style={styles.detail}>{translations[language].cash}</Text>
-          <Text style={styles.detail}>{translations[language].mobileWallets}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].paymentMethods}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].creditCards}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].cash}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].mobileWallets}
+          </Text>
 
           {/* Divider */}
           <View style={styles.divider} />
 
           {/* Contact Us Section */}
-          <Text style={styles.subtitle}>{translations[language].contactUs}</Text>
-          <Text style={styles.detail}>{translations[language].contactText}</Text>
+          <Text style={[styles.subtitle, language === 'ar' && styles.rtlText]}>
+            {translations[language].contactUs}
+          </Text>
+          <Text style={[styles.detail, language === 'ar' && styles.rtlText]}>
+            {translations[language].contactText}
+          </Text>
         </ScrollView>
       </ImageBackground>
     </View>
@@ -173,54 +215,62 @@ const styles = StyleSheet.create({
     resizeMode: 'cover',
   },
   detailsBox: {
-    backgroundColor: 'rgba(0, 0, 0, 0.7)', // Dark background overlay
+    backgroundColor: 'rgba(0, 0, 0, 0.7)',
     padding: 20,
     margin: 20,
     borderRadius: 15,
   },
   title: {
-    color: 'white', // Title text color
+    color: 'white',
     fontSize: 36,
     fontWeight: 'bold',
     textAlign: 'center',
     marginBottom: 20,
   },
+  rtlText: {
+    writingDirection: 'rtl',
+    textAlign: 'right',
+  },
   subtitle: {
-    color: 'orange', // Subtitle text color
+    color: 'orange',
     fontSize: 26,
     fontWeight: '600',
     marginBottom: 10,
     marginTop: 20,
   },
   detail: {
-    color: 'white', // Detail text color
+    color: 'white',
     fontSize: 18,
     marginBottom: 10,
   },
   socialIcons: {
-    flexDirection: 'row', // Align icons in a row
+    flexDirection: 'row',
     justifyContent: 'space-around',
     marginTop: 10,
   },
   icon: {
-    marginHorizontal: 10, // Horizontal spacing for icons
+    marginHorizontal: 10,
+  },
+  xIcon: {
+    width: 40,
+    height: 40,
   },
   divider: {
-    height: 1, // Divider line height
-    backgroundColor: 'orange', // Divider line color
+    height: 1,
+    backgroundColor: 'orange',
     marginVertical: 20,
   },
   languageButton: {
-    position: 'absolute', // Make the button float
-    top: 5, // Adjusted to move it slightly higher
-    right: 15, // Keep it aligned to the right
+    position: 'absolute',
+    top: 5,
+    right: 15,
     flexDirection: 'row',
     alignItems: 'center',
-    backgroundColor: 'rgba(0, 0, 0, 0.8)', // Slightly darker background for visibility
+    backgroundColor: 'rgba(0, 0, 0, 0.8)',
     paddingVertical: 10,
     paddingHorizontal: 15,
     borderRadius: 50,
-    zIndex: 1000, // Ensure it stays above other elements
+    zIndex: 1000,
   },
   languageText: {
     color: '#efbf04',
