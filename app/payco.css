@@ -1,0 +1,136 @@
+/* this is reactNative payco.css */
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+h1 {
+    @apply text-2xl font-bold;
+}
+
+@import url('https://fonts.googleapis.com/css2?family=Roboto:ital,wght@0,100;0,300;0,400;0,500;0,700;0,900;1,100;1,300;1,400;1,500;1,700;1,900&display=swap');
+
+html {
+    font-family: 'Roboto', sans-serif;
+    letter-spacing: 0.1px;
+    scroll-behavior: smooth;
+    box-sizing: border-box;
+}
+
+
+
+* {
+    margin: 0;
+    padding: 0;
+
+}
+
+.whiteBg {
+    background: #FFFFFF;
+
+}
+
+.redBtn {
+    width: 220px;
+    /* Fixed width */
+    height: 64px;
+    /* Fixed height */
+    border-radius: 8px;
+    /* Rounded corners */
+    margin-top: 40px;
+}
+
+
+.greyBtn {
+    width: 280px;
+    /* Fixed width */
+    height: 62px;
+    /* Fixed height */
+    border-radius: 8px;
+    /* Rounded corners */
+    margin-top: 40px;
+}
+
+.redBg {
+    background: #C20101;
+
+}
+
+.greyBg {
+    background: #B7B7B7;
+
+}
+
+.greyBg2{
+    background: #ECECEC;
+
+}
+
+.greyColor {
+    color: #707070;
+}
+
+.whiteColor{
+    color: #FFFFFF;
+}
+
+.redClr {
+    color: #C20101;
+}
+
+.orangeClr{
+    color: #FFB930;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+
+.labelStyles {
+    width: 685px;
+    /* Fixed width */
+    height: 48px;
+    /* Fixed height */
+    padding: 13px 16px;
+    /* Padding applied on top-bottom and left-right */
+    border: 1px solid black;
+    /* Border with solid black color */
+    border-radius: 4px;
+    /* Adjust radius as needed */
+}
+
+.iconGap {
+    gap: 7px !important;
+
+}
+
+
+.verfBtn {
+    width: 94px;
+    /* Set width as needed */
+    height: 48px;
+    /* Set height as needed */
+    gap: 10px;
+    background-color: #202020;
+    /* Set background color */
+    color: #FFFFFF;
+
+}
+
+.borderInput {
+    width: 100%;
+    border-radius: var(--mainraduis);
+    border: 1px 0px 0px 0px;
+    opacity: 0px;
+    border: 1px solid var(--border-normal, #807E7E);
+
+}
+
+@media (max-width: 650px) {
+    .redBtn, .greyBtn {
+        width: 100%;
+       
+    }
+    
+}
