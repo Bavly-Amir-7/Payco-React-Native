@@ -1,381 +1,167 @@
-import React, { useState } from "react";
-import {
-  View,
-  Text,
-  StyleSheet,
-  ImageBackground,
-  TextInput,
-  Pressable,
-  Dimensions,
-} from "react-native";
-import { Ionicons } from "@expo/vector-icons";
-import { SafeAreaView } from "react-native-safe-area-context";
-import { useNavigation } from "@react-navigation/native";
-import icedCoffeeImg from "../assets/images/menu/small-cup-black-coffee-dark-background-with-coffee-beans_155165-7704.avif";
+import React, { useState } from 'react';
+import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, ScrollView } from 'react-native';
+import { Ionicons } from '@expo/vector-icons';
+import { SvgXml } from 'react-native-svg';
+import image2 from "../assets/images/Ayco2.png";
+import { useNavigation } from '@react-navigation/native';
 
-const { height } = Dimensions.get("window");
 
-const SignUp = () => {
-  const [password, setPassword] = useState("");
-  const [confirmPassword, setConfirmPassword] = useState("");
-  const [passwordVisible, setPasswordVisible] = useState(false);
-  const [confirmPasswordVisible, setConfirmPasswordVisible] = useState(false);
-  const [language, setLanguage] = useState("en");
+export default function SignPage() {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showRetypePassword, setShowRetypePassword] = useState(false);
+  const [password, setPassword] = useState('');
+  const [retypePassword, setRetypePassword] = useState('');
+
+  const validatePassword = (pass, retype) => {
+    return {
+      length: pass.length >= 8,
+      uppercase: /[A-Z]/.test(pass),
+      number: /[0-9]/.test(pass),
+      special: /[@#$%^&*]/.test(pass),
+      lowercase: /[a-z]/.test(pass),
+      match: pass === retype,
+    };
+  };
+
+  const passwordValid = validatePassword(password, retypePassword);
+
+  const googleSvg = `<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+    <g clipPath="url(#clip0_2795_60742)">
+      <path d="M5.77203 14.5027L4.93663 17.6213L1.88323 17.6859C0.970719 15.9934 0.453125 14.057 0.453125 11.9992C0.453125 10.0093 0.937063 8.13277 1.79488 6.48047H1.79553L4.51391 6.97884L5.70472 9.68091C5.45548 10.4075 5.31964 11.1875 5.31964 11.9992C5.31973 12.88 5.4793 13.724 5.77203 14.5027Z" fill="#FBBB00"/>
+      <path d="M24.2433 9.75781C24.3811 10.4837 24.453 11.2334 24.453 11.9996C24.453 12.8587 24.3627 13.6967 24.1906 14.5051C23.6064 17.2558 22.08 19.6578 19.9655 21.3576L19.9649 21.3569L16.541 21.1822L16.0564 18.1572C17.4594 17.3343 18.5559 16.0466 19.1335 14.5051H12.7168V9.75781H19.2271H24.2433Z" fill="#518EF8"/>
+      <path d="M19.9655 21.3577L19.9662 21.3584C17.9097 23.0113 15.2974 24.0004 12.4537 24.0004C7.88379 24.0004 3.91062 21.4461 1.88379 17.6872L5.77259 14.5039C6.78598 17.2085 9.39499 19.1338 12.4537 19.1338C13.7684 19.1338 15.0001 18.7784 16.057 18.158L19.9655 21.3577Z" fill="#28B446"/>
+      <path d="M20.1127 2.76262L16.2253 5.94525C15.1314 5.26153 13.8384 4.86656 12.4532 4.86656C9.32525 4.86656 6.66744 6.88017 5.70481 9.68175L1.79558 6.48131H1.79492C3.79208 2.63077 7.81536 0 12.4532 0C15.3648 0 18.0345 1.03716 20.1127 2.76262Z" fill="#F14336"/>
+    </g>
+    <defs>
+      <clipPath id="clip0_2795_60742">
+        <rect width="24" height="24" fill="white" transform="translate(0.453125)"/>
+      </clipPath>
+    </defs>
+  </svg>`;
 
   const navigation = useNavigation();
 
-  const toggleLanguage = () => {
-    setLanguage((prev) => (prev === "en" ? "ar" : "en"));
-  };
 
-  const translations = {
-    en: {
-      title: "Sign Up",
-      emailPlaceholder: "Email",
-      passwordPlaceholder: "Password",
-      confirmPasswordPlaceholder: "Confirm Password",
-      signUpButton: "Sign Up",
-      googleButton: "Sign Up with Google ",
-      facebookButton: "Sign Up with Facebook ",
-      phoneButton: "Sign Up with Phone ",
-      alreadyHaveAccount: "Already have an account?",
-      loginLink: "Sign in",
-      passwordsMatch: "Passwords match",
-      passwordsDoNotMatch: "Passwords do not match",
-    },
-    ar: {
-      title: "إنشاء حساب",
-      emailPlaceholder: "البريد الإلكتروني",
-      passwordPlaceholder: "كلمة المرور",
-      confirmPasswordPlaceholder: "تأكيد كلمة المرور",
-      signUpButton: "إنشاء حساب",
-      googleButton: "إنشاء حساب عبر جوجل ",
-      facebookButton: "إنشاء حساب عبر فيسبوك ",
-      phoneButton: "إنشاء حساب عبر الهاتف ",
-      alreadyHaveAccount: "هل لديك حساب بالفعل؟",
-      loginLink: "تسجيل الدخول",
-      passwordsMatch: "كلمات المرور متطابقة",
-      passwordsDoNotMatch: "كلمات المرور غير متطابقة",
-    },
-  };
 
-  const t = translations[language];
-
-  const matchStatus =
-    password && confirmPassword
-      ? password === confirmPassword
-        ? t.passwordsMatch
-        : t.passwordsDoNotMatch
-      : "";
 
   return (
-    <SafeAreaView style={styles.safeContainer}>
-      <ImageBackground
-        source={icedCoffeeImg}
-        style={styles.image}
-        resizeMode="cover"
-      >
-        <View style={styles.overlay} />
+    <ScrollView contentContainerStyle={styles.container}>
+      <View style={styles.formContainer}>
+        <Image source={image2} style={styles.logo} resizeMode="contain" />
+        <Text style={styles.title}>Welcome Back</Text>
 
-        {/* Header */}
-        <View style={[styles.header, language === "ar" && styles.headerAr]}>
-          {/* Title */}
-          <Text style={[styles.title, language === "ar" && styles.textRight]}>
-            {t.title}
-          </Text>
-          {/* Language Button */}
-          <Pressable style={styles.languageButton} onPress={toggleLanguage}>
-            <Ionicons name="globe" size={24} color="#efbf04" />
-            <Text style={styles.languageText}>
-              {language === "en" ? "العربية" : "English"}
-            </Text>
-          </Pressable>
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Email</Text>
+          <View style={styles.inputWrapper}>
+            <Ionicons name="mail-outline" size={18} color="black" />
+            <View style={styles.divider}></View>
+            <TextInput placeholder="username@gmail.com" style={styles.input} keyboardType="email-address" />
+          </View>
         </View>
 
-        <View style={styles.wrapper}>
-          {/* Email Input */}
+        <View style={styles.inputContainer}>
+          <Text style={styles.label}>Create Password</Text>
           <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder={t.emailPlaceholder}
-              placeholderTextColor="#ccc"
-              style={[styles.input, language === "ar" && styles.inputRight]}
-            />
+            <Ionicons name="lock-closed-outline" size={18} color="black" />
+            <View style={styles.divider}></View>
+            <TextInput placeholder="********" style={styles.input} secureTextEntry={!showPassword} onChangeText={setPassword} />
+            <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
+              <Ionicons name={showPassword ? "eye" : "eye-off"} size={18} color="black" />
+            </TouchableOpacity>
           </View>
-
-          {/* Password Input */}
-          <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder={t.passwordPlaceholder}
-              placeholderTextColor="#ccc"
-              secureTextEntry={!passwordVisible}
-              style={[styles.input, language === "ar" && styles.inputRight]}
-              value={password}
-              onChangeText={setPassword}
-            />
-            <Pressable
-              onPress={() => setPasswordVisible(!passwordVisible)}
-              style={[
-                styles.iconInsideInput,
-                language === "ar" && styles.iconLeft,
-              ]}
-            >
-              <Ionicons
-                name={passwordVisible ? "eye-off" : "eye"}
-                size={24}
-                color="#ccc"
-              />
-            </Pressable>
-          </View>
-
-          {/* Confirm Password Input */}
-          <View style={styles.inputWrapper}>
-            <TextInput
-              placeholder={t.confirmPasswordPlaceholder}
-              placeholderTextColor="#ccc"
-              secureTextEntry={!confirmPasswordVisible}
-              style={[styles.input, language === "ar" && styles.inputRight]}
-              value={confirmPassword}
-              onChangeText={setConfirmPassword}
-            />
-            <Pressable
-              onPress={() => setConfirmPasswordVisible(!confirmPasswordVisible)}
-              style={[
-                styles.iconInsideInput,
-                language === "ar" && styles.iconLeft,
-              ]}
-            >
-              <Ionicons
-                name={confirmPasswordVisible ? "eye-off" : "eye"}
-                size={24}
-                color="#ccc"
-              />
-            </Pressable>
-          </View>
-
-          {/* Match Status */}
-          {matchStatus !== "" && (
-            <View
-              style={[
-                styles.matchStatusContainer,
-                matchStatus === t.passwordsMatch
-                  ? styles.matchSuccessBackground
-                  : styles.matchErrorBackground,
-              ]}
-            >
-              <Text style={styles.matchStatusText}>{matchStatus}</Text>
-            </View>
-          )}
-
-          {/* Sign Up Button */}
-          <Pressable style={styles.signUpButton}>
-            <Text style={styles.buttonText}>{t.signUpButton}</Text>
-          </Pressable>
-
-          {/* Social Buttons */}
-          <Pressable
-            style={[
-              styles.googleButton,
-              language === "ar" && styles.buttonRTL,
-            ]}
-          >
-            <Text style={styles.buttonText}>{t.googleButton}</Text>
-            <Ionicons name="logo-google" size={20} color="#fff" />
-          </Pressable>
-
-          <Pressable
-            style={[
-              styles.facebookButton,
-              language === "ar" && styles.buttonRTL,
-            ]}
-          >
-            <Text style={styles.buttonText}>{t.facebookButton}</Text>
-            <Ionicons name="logo-facebook" size={20} color="#fff" />
-          </Pressable>
-
-          <Pressable
-            style={[
-              styles.phoneButton,
-              language === "ar" && styles.buttonRTL,
-            ]}
-          >
-            <Text style={styles.buttonText}>{t.phoneButton}</Text>
-            <Ionicons name="call" size={20} color="#fff" />
-          </Pressable>
-
-          {/* Already Have Account */}
-          <Text style={[styles.link, language === "ar" && styles.centeredLink]}>
-            {t.alreadyHaveAccount}{" "}
-            <Text
-              style={styles.loginLink}
-              onPress={() => navigation.navigate("login")}
-            >
-              {t.loginLink}
-            </Text>
-          </Text>
         </View>
-      </ImageBackground>
-    </SafeAreaView>
+
+        <View>
+          {Object.entries(passwordValid).slice(0, 5).map(([key, valid]) => (
+            <Text key={key} style={valid ? styles.validText : styles.invalidText}>
+              {key.charAt(0).toUpperCase() + key.slice(1)} requirement
+            </Text>
+          ))}
+        </View>
+
+        <View style={[styles.inputContainer, { paddingTop: 10 }]}>
+        <Text style={styles.label}>Retype Password</Text>
+          <View style={styles.inputWrapper}>
+            <Ionicons name="lock-closed-outline" size={18} color="black" />
+            <View style={styles.divider}></View>
+            <TextInput placeholder="********" style={styles.input} secureTextEntry={!showRetypePassword} onChangeText={setRetypePassword} />
+            <TouchableOpacity onPress={() => setShowRetypePassword(!showRetypePassword)}>
+              <Ionicons name={showRetypePassword ? "eye" : "eye-off"} size={18} color="black" />
+            </TouchableOpacity>
+          </View>
+        </View>
+
+        <Text style={passwordValid.match ? styles.validText : styles.invalidText}>
+          {passwordValid.match ? "Passwords match" : "Passwords do not match"}
+        </Text>
+
+        <TouchableOpacity style={styles.signupButton}>
+          <Text style={styles.signupButtonText}>Sign Up</Text>
+        </TouchableOpacity>
+
+        <Text style={styles.termsText}>To continue signing up, you have to agree to our Terms of Service and Privacy Policy.</Text>
+
+        <View style={styles.separator}><Text>OR</Text></View>
+
+        <TouchableOpacity style={styles.googleButton}>
+          <SvgXml xml={googleSvg} width="25" height="24" />
+          <Text style={styles.googleText}>Sign up with Google</Text>
+        </TouchableOpacity>
+
+
+        <View style={styles.signupContainer}>
+          <Text style={styles.signupText}>have an account?</Text>
+          <TouchableOpacity onPress={() => navigation.navigate("index")}>
+            <Text style={styles.signupLink}> Sign in</Text>
+          </TouchableOpacity>
+        </View>
+
+      </View>
+    </ScrollView>
   );
-};
+}
 
-export default SignUp;
 
 const styles = StyleSheet.create({
-  safeContainer: {
-    flex: 1,
-    backgroundColor: "#000",
-  },
-  image: {
-    flex: 1,
-    width: "100%",
-    height: height,
-  },
-  overlay: {
-    ...StyleSheet.absoluteFillObject,
-    backgroundColor: "rgba(0, 0, 0, 0.5)",
-  },
-  header: {
+  formContainer: { width: "100%", maxWidth: 400 },
+  logo: { width: 100, height: 40, alignSelf: "center", marginBottom: 20 },
+  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
+  inputContainer: { marginBottom: 15 },
+  label: { color: "#333", marginBottom: 5, fontSize: 14 },
+  inputWrapper: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: "#ccc", borderRadius: 5, paddingHorizontal: 10, backgroundColor: "#fff", height: 40 },
+  divider: { marginHorizontal: 10, color: "#999" },
+  input: { flex: 1, paddingVertical: 8, fontSize: 14, color: "#333" },
+  validText: { color: "green", fontSize: 12 },
+  invalidText: { color: "red", fontSize: 12 },
+  signupButton: { backgroundColor: "#E74C3C", padding: 15, borderRadius: 5, alignItems: "center", marginTop: 10 },
+  signupButtonText: { color: "#fff", fontSize: 16 },
+  termsText: { textAlign: "center", color: "#777", marginVertical: 10 },
+  separator: { alignItems: "center", marginVertical: 15 },
+  googleButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 10, borderColor: "#ccc", borderWidth: 1, borderRadius: 5 },
+  googleText: { marginLeft: 5, color: "#555" },
+
+
+  container: { flexGrow: 1, justifyContent: "center", alignItems: "center", backgroundColor: "#fff", padding: 20 },
+  formContainer: { width: "100%", maxWidth: 400 },
+  logo: { width: 100, height: 40, alignSelf: "center", marginBottom: 20 },
+  title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
+  googleButton: { flexDirection: "row", alignItems: "center", justifyContent: "center", padding: 10, borderColor: "#ccc", borderWidth: 1, borderRadius: 5, backgroundColor: "#fff", marginTop: 10 },
+  googleText: { marginLeft: 5, color: "#555" },
+  inputWrapper: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: "#ccc", borderRadius: 5, paddingHorizontal: 10, backgroundColor: "#fff", height: 40 },
+  divider: { width: 1, height: "60%", backgroundColor: "#ccc", marginHorizontal: 10 },
+
+
+  signupContainer: {
     flexDirection: "row",
-    justifyContent: "space-between",
-    alignItems: "center",
-    paddingHorizontal: 20,
-    marginTop: 20,
-  },
-  headerAr: {
-    flexDirection: "row-reverse",
-  },
-  languageButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    backgroundColor: "rgba(0, 0, 0, 0.8)",
-    paddingVertical: 10,
-    paddingHorizontal: 15,
-    borderRadius: 50,
-  },
-  languageText: {
-    color: "#efbf04",
-    fontSize: 16,
-    fontWeight: "bold",
-    marginLeft: 8,
-  },
-  title: {
-    color: "#fff",
-    fontSize: 36,
-    fontWeight: "bold",
-  },
-  textRight: {
-    textAlign: "right",
-  },
-  wrapper: {
-    flex: 1,
     justifyContent: "center",
-    alignItems: "center",
-    padding: 20,
+    marginTop: 10
   },
-  inputWrapper: {
-    position: "relative",
-    width: "90%",
-    marginBottom: 15,
+  signupText: {
+    color: "#777"
   },
-  input: {
-    width: "100%",
-    backgroundColor: "rgba(29, 21, 21, 0.8)",
-    borderRadius: 25,
-    paddingVertical: 15,
-    paddingHorizontal: 15,
-    color: "#fff",
-    fontSize: 16,
-    borderWidth: 1,
-    borderColor: "#fff",
+  signupLink: {
+    color: "#E74C3C",
+    fontWeight: "bold"
   },
-  inputRight: {
-    textAlign: "right",
-  },
-  iconInsideInput: {
-    position: "absolute",
-    top: "50%",
-    transform: [{ translateY: -12 }],
-    right: 15,
-  },
-  iconLeft: {
-    right: "auto",
-    left: 15,
-  },
-  matchStatusContainer: {
-    padding: 10,
-    borderRadius: 10,
-    alignSelf: "center",
-    marginTop: 10,
-  },
-  matchSuccessBackground: {
-    backgroundColor: "rgba(0, 128, 0, 0.8)",
-  },
-  matchErrorBackground: {
-    backgroundColor: "rgba(255, 0, 0, 0.8)",
-  },
-  matchStatusText: {
-    color: "#fff",
-    fontSize: 14,
-    fontWeight: "bold",
-    textAlign: "center",
-  },
-  signUpButton: {
-    width: "70%",
-    borderRadius: 25,
-    alignItems: "center",
-    paddingVertical: 15,
-    backgroundColor: "#6C63FF",
-    marginTop: 20,
-  },
-  googleButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#DB4437",
-    width: "70%",
-    borderRadius: 25,
-    paddingVertical: 15,
-    marginTop: 15,
-  },
-  facebookButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#4267B2",
-    width: "70%",
-    borderRadius: 25,
-    paddingVertical: 15,
-    marginTop: 15,
-  },
-  phoneButton: {
-    flexDirection: "row",
-    alignItems: "center",
-    justifyContent: "center",
-    backgroundColor: "#0F9D58",
-    width: "70%",
-    borderRadius: 25,
-    paddingVertical: 15,
-    marginTop: 15,
-  },
-  buttonRTL: {
-    flexDirection: "row-reverse",
-  },
-  buttonText: {
-    color: "#fff",
-    fontSize: 16,
-    fontWeight: "bold",
-  },
-  link: {
-    color: "#fff",
-    fontSize: 14,
-    marginTop: 20,
-    textAlign: "center",
-  },
-  centeredLink: {
-    textAlign: "center",
-  },
-  loginLink: {
-    fontWeight: "bold",
-    textDecorationLine: "underline",
-  },
+
 });

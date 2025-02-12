@@ -1,19 +1,21 @@
 {
   "expo": {
-    "name": "MyNewApp",
-    "slug": "MyNewApp",
+    "name": "PaycoApp",
+    "slug": "PaycoApp",
     "version": "1.0.0",
     "orientation": "portrait",
-    "icon": "./assets/images/coffee-icon.png",
-    "scheme": "myapp",
+    "icon": "./assets/images/payco.png",
+    "scheme": "payco",
     "userInterfaceStyle": "automatic",
-    "newArchEnabled": true,
+    "newArchEnabled": false, 
+    "jsEngine": "jsc", 
+
     "ios": {
       "supportsTablet": true
     },
     "android": {
       "adaptiveIcon": {
-        "foregroundImage": "./assets/images/adaptive-icon.png",
+        "foregroundImage": "./assets/images/payco.png",
         "backgroundColor": "#ffffff"
       }
     },
@@ -42,14 +44,26 @@
         "origin": false
       },
       "eas": {
-        "projectId": "a219414a-357a-4c48-8366-e844bdbed1d0"
+        "projectId": "da93a001-651c-4d58-beec-0647c4504745"
       }
     },
     "runtimeVersion": {
       "policy": "appVersion"
     },
     "updates": {
-      "url": "https://u.expo.dev/a219414a-357a-4c48-8366-e844bdbed1d0"
-    }
+      "url": "https://u.expo.dev/da93a001-651c-4d58-beec-0647c4504745"
+    },
+    "owner": "bavly707",
+    "assetBundlePatterns": ["**/*"], 
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": ["js", "jsx", "ts", "tsx", "json", "cjs"]
+    },
+    "permissions": [
+      "CAMERA",
+      "LOCATION",
+      "NOTIFICATIONS"
+    ],
+    "debuggerHost": "localhost:19000"
   }
 }
