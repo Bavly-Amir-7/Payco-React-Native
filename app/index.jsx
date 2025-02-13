@@ -3,21 +3,25 @@ import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Modal, Scro
 import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { SvgXml } from 'react-native-svg';
+import { useRouter } from 'expo-router'; // ✅ استبدال useNavigation
 
 
 import image1 from "../assets/images/computer.png";
 import image2 from "../assets/images/Ayco2.png";
 
-export default function LoginPage() {
+export default function LoginPage({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
-  const navigation = useNavigation(); // للتحكم في التنقل بين الشاشات
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
   const [rememberMe, setRememberMe] = useState(false);
+
+
+  const router = useRouter(); // ✅ استخدم useRouter للتحكم في التنقل
+
 
   const googleSvg = `<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
   <g clipPath="url(#clip0_2795_60742)">
@@ -171,15 +175,17 @@ export default function LoginPage() {
               >
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableOpacity>
+             
+             
               <TouchableOpacity
-                style={styles.modalButton}
-                onPress={() => {
-                  setShowTerms(false);
-                  navigation.navigate("signup"); // ✅ تأكد أن الاسم مطابق لـ RootLayout.js
-                }}
-              >
-                <Text style={styles.modalButtonText}>I Agree</Text>
-              </TouchableOpacity>
+              style={styles.modalButton}
+              onPress={() => {
+                setShowTerms(false);
+                router.push('/signup'); // ✅ استخدم router.push للانتقال
+              }}
+            >
+              <Text style={styles.modalButtonText}>I Agree</Text>
+            </TouchableOpacity>
 
             </View>
           </View>

@@ -4,13 +4,18 @@ import { Ionicons } from '@expo/vector-icons';
 import { SvgXml } from 'react-native-svg';
 import image2 from "../assets/images/Ayco2.png";
 import { useNavigation } from '@react-navigation/native';
+import { useRouter } from 'expo-router'; // ✅ استخدم useRouter
 
 
-export default function SignPage() {
+export default function SignPage({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showRetypePassword, setShowRetypePassword] = useState(false);
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState('');
+
+
+  const router = useRouter(); // ✅ استخدم useRouter بدلاً من navigation
+
 
   const validatePassword = (pass, retype) => {
     return {
@@ -39,7 +44,6 @@ export default function SignPage() {
     </defs>
   </svg>`;
 
-  const navigation = useNavigation();
 
 
 
@@ -80,7 +84,7 @@ export default function SignPage() {
         </View>
 
         <View style={[styles.inputContainer, { paddingTop: 10 }]}>
-        <Text style={styles.label}>Retype Password</Text>
+          <Text style={styles.label}>Retype Password</Text>
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={18} color="black" />
             <View style={styles.divider}></View>
@@ -111,7 +115,7 @@ export default function SignPage() {
 
         <View style={styles.signupContainer}>
           <Text style={styles.signupText}>have an account?</Text>
-          <TouchableOpacity onPress={() => navigation.navigate("index")}>
+          <TouchableOpacity onPress={() => router.push('/')}> {/* ✅ التنقل للصفحة الرئيسية */}
             <Text style={styles.signupLink}> Sign in</Text>
           </TouchableOpacity>
         </View>
