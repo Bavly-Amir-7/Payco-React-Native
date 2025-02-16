@@ -5,30 +5,76 @@ import { SvgXml } from 'react-native-svg';
 import image2 from "../assets/images/Ayco2.png";
 import { useNavigation } from '@react-navigation/native';
 import { useRouter } from 'expo-router'; // ✅ استخدم useRouter
+import { Alert } from 'react-native';
+
 
 
 export default function SignPage({ navigation }) {
+  const [email, setEmail] = useState('');
   const [showPassword, setShowPassword] = useState(false);
   const [showRetypePassword, setShowRetypePassword] = useState(false);
   const [password, setPassword] = useState('');
   const [retypePassword, setRetypePassword] = useState('');
+  const [loading, setLoading] = useState(false);
+  const [error, setError] = useState(null);
 
+  const router = useRouter();
 
-  const router = useRouter(); // ✅ استخدم useRouter بدلاً من navigation
-
-
-  const validatePassword = (pass, retype) => {
-    return {
-      length: pass.length >= 8,
-      uppercase: /[A-Z]/.test(pass),
-      number: /[0-9]/.test(pass),
-      special: /[@#$%^&*]/.test(pass),
-      lowercase: /[a-z]/.test(pass),
-      match: pass === retype,
-    };
-  };
+  // تحقق من قوة كلمة المرور
+  const validatePassword = (pass, retype) => ({
+    length: pass.length >= 8,
+    uppercase: /[A-Z]/.test(pass),
+    number: /[0-9]/.test(pass),
+    special: /[@#$%^&*]/.test(pass),
+    lowercase: /[a-z]/.test(pass),
+    match: pass === retype,
+  });
 
   const passwordValid = validatePassword(password, retypePassword);
+
+  // دالة التسجيل
+  const handleSubmit = async () => {
+    setError(null);
+    setLoading(true);
+
+    if (!passwordValid.match) {
+      Alert.alert("خطأ", "كلمتا المرور غير متطابقتين");
+      setLoading(false);
+      return;
+    }
+
+    try {
+      const response = await fetch("https://your-api.com/api/auth/signup", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({ email, password }),
+      });
+
+      let data;
+      try {
+        data = await response.json();
+      } catch {
+        throw new Error(`خطأ في تحليل الاستجابة من السيرفر (${response.status})`);
+      }
+
+
+      if (!response.ok) {
+        throw new Error(data.message || `خطأ غير معروف (${response.status})`);
+      }
+
+      Alert.alert("تم التسجيل بنجاح!", "يرجى التحقق من البريد الإلكتروني لتأكيد الحساب.");
+      router.push("/login"); // الانتقال لصفحة تسجيل الدخول بعد النجاح
+
+    } catch (err) {
+      console.error("Signup Error:", err.message);
+      setError(err.message);
+      Alert.alert("خطأ", err.message);
+    }
+
+    setLoading(false);
+  };
 
   const googleSvg = `<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
     <g clipPath="url(#clip0_2795_60742)">
@@ -54,12 +100,22 @@ export default function SignPage({ navigation }) {
         <Image source={image2} style={styles.logo} resizeMode="contain" />
         <Text style={styles.title}>Welcome Back</Text>
 
+
+        {error && <Text style={styles.errorText}>{error}</Text>}
+
+
         <View style={styles.inputContainer}>
           <Text style={styles.label}>Email</Text>
           <View style={styles.inputWrapper}>
             <Ionicons name="mail-outline" size={18} color="black" />
             <View style={styles.divider}></View>
-            <TextInput placeholder="username@gmail.com" style={styles.input} keyboardType="email-address" />
+            <TextInput
+              placeholder="example@gmail.com"
+              style={styles.input}
+              keyboardType="email-address"
+              value={email} // ✅ ربط الإدخال بالحالة
+              onChangeText={setEmail} // ✅ تحديث الحالة عند الكتابة
+            />
           </View>
         </View>
 
@@ -68,12 +124,19 @@ export default function SignPage({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={18} color="black" />
             <View style={styles.divider}></View>
-            <TextInput placeholder="********" style={styles.input} secureTextEntry={!showPassword} onChangeText={setPassword} />
+            <TextInput
+              placeholder="********"
+              style={styles.input}
+              secureTextEntry={!showPassword}
+              value={password}
+              onChangeText={setPassword}
+            />
             <TouchableOpacity onPress={() => setShowPassword(!showPassword)}>
               <Ionicons name={showPassword ? "eye" : "eye-off"} size={18} color="black" />
             </TouchableOpacity>
           </View>
         </View>
+
 
         <View>
           {Object.entries(passwordValid).slice(0, 5).map(([key, valid]) => (
@@ -88,7 +151,14 @@ export default function SignPage({ navigation }) {
           <View style={styles.inputWrapper}>
             <Ionicons name="lock-closed-outline" size={18} color="black" />
             <View style={styles.divider}></View>
-            <TextInput placeholder="********" style={styles.input} secureTextEntry={!showRetypePassword} onChangeText={setRetypePassword} />
+            <TextInput
+              placeholder="********"
+              style={styles.input}
+              secureTextEntry={!showRetypePassword}
+              value={retypePassword} // ✅ Missing value fixed
+              onChangeText={setRetypePassword}
+            />
+
             <TouchableOpacity onPress={() => setShowRetypePassword(!showRetypePassword)}>
               <Ionicons name={showRetypePassword ? "eye" : "eye-off"} size={18} color="black" />
             </TouchableOpacity>
@@ -99,9 +169,16 @@ export default function SignPage({ navigation }) {
           {passwordValid.match ? "Passwords match" : "Passwords do not match"}
         </Text>
 
-        <TouchableOpacity style={styles.signupButton}>
-          <Text style={styles.signupButtonText}>Sign Up</Text>
+        <TouchableOpacity
+          style={[styles.signupButton, loading && styles.disabledButton]}
+          onPress={handleSubmit}
+          disabled={loading}
+        >
+          <Text style={styles.signupButtonText}>{loading ? "Signing up..." : "Sign Up"}</Text>
         </TouchableOpacity>
+
+
+
 
         <Text style={styles.termsText}>To continue signing up, you have to agree to our Terms of Service and Privacy Policy.</Text>
 
@@ -127,7 +204,7 @@ export default function SignPage({ navigation }) {
 
 
 const styles = StyleSheet.create({
-  formContainer: { width: "100%", maxWidth: 400 },
+  formContainer: { width: "80%" },
   logo: { width: 100, height: 40, alignSelf: "center", marginBottom: 20 },
   title: { fontSize: 24, fontWeight: "bold", textAlign: "center", marginBottom: 20 },
   inputContainer: { marginBottom: 15 },
@@ -153,6 +230,8 @@ const styles = StyleSheet.create({
   googleText: { marginLeft: 5, color: "#555" },
   inputWrapper: { flexDirection: "row", alignItems: "center", borderWidth: 1, borderColor: "#ccc", borderRadius: 5, paddingHorizontal: 10, backgroundColor: "#fff", height: 40 },
   divider: { width: 1, height: "60%", backgroundColor: "#ccc", marginHorizontal: 10 },
+  disabledButton: { opacity: 0.5 },
+
 
 
   signupContainer: {

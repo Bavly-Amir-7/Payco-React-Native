@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { View, Text, StyleSheet, Image, TextInput, TouchableOpacity, Modal, ScrollView } from 'react-native';
-import { useNavigation } from '@react-navigation/native';
 import { Ionicons } from '@expo/vector-icons';
 import { SvgXml } from 'react-native-svg';
 import { useRouter } from 'expo-router'; // ✅ استبدال useNavigation
+import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
 
 import image1 from "../assets/images/computer.png";
@@ -12,15 +13,83 @@ import image2 from "../assets/images/Ayco2.png";
 export default function LoginPage({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
   const [showTerms, setShowTerms] = useState(false);
+  const [email, setEmail] = useState(""); // ✅ تعريف البريد الإلكتروني
+  const [password, setPassword] = useState(""); // ✅ تعريف كلمة المرور
+  const [error, setError] = useState(null); // ✅ تعريف error
+  const [rememberMe, setRememberMe] = useState(false);
+
+  const router = useRouter(); // ✅ استخدم useRouter للتنقل
 
   const togglePasswordVisibility = () => {
     setShowPassword(!showPassword);
   };
 
-  const [rememberMe, setRememberMe] = useState(false);
+  // 🛠️ **دالة تسجيل الدخول**
+  const handleLogin = async () => {
+    setError(null);
+  
+    if (!email || !password) {
+      Alert.alert("Error", "Please enter both email and password");
+      return;
+    }
+  
+    try {
+      console.log("🔵 Sending request...");
+      const response = await fetch("https://your-api.com/api/auth/login", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+          "Accept": "application/json"
+        },
+        body: JSON.stringify({ email, password }),
+      });
+  
+      console.log("🟢 Response status:", response.status);
+      const text = await response.text();
+      console.log("🟠 Raw response:", text);
+  
+      if (!response.ok) {
+        throw new Error(`Error: ${response.status}, ${text}`);
+      }
+  
+      if (!text || !text.trim()) {
+        throw new Error("Empty response from server");
+      }
+  
+      let data;
+      try {
+        data = JSON.parse(text);
+      } catch (error) {
+        throw new Error("Invalid server response format");
+      }
+  
+      console.log("✅ Parsed data:", data);
+  
+      if (data.accessToken && data.refreshToken) {
+        await AsyncStorage.setItem("accessToken", data.accessToken);
+        await AsyncStorage.setItem("refreshToken", data.refreshToken);
+      }
+  
+      if (rememberMe) {
+        await AsyncStorage.setItem("savedEmail", email);
+        await AsyncStorage.setItem("savedPassword", password);
+      } else {
+        await AsyncStorage.removeItem("savedEmail");
+        await AsyncStorage.removeItem("savedPassword");
+      }
+  
+      Alert.alert("Login Successful!");
+      router.push("/dashboard");
+    } catch (err) {
+      console.error("🔴 Login Error:", err.message);
+      setError(err.message);
+      Alert.alert("Error", err.message);
+    }
+  };
+  
 
+ 
 
-  const router = useRouter(); // ✅ استخدم useRouter للتحكم في التنقل
 
 
   const googleSvg = `<svg width="25" height="24" viewBox="0 0 25 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -57,14 +126,17 @@ export default function LoginPage({ navigation }) {
             </View>
 
             <View style={styles.inputContainer}>
-              <Text style={styles.label}>Email.</Text>
+              <Text style={styles.label}>Email</Text>
               <View style={styles.inputWrapper}>
                 <Ionicons name="mail-outline" size={18} color="black" />
-                <View style={styles.divider}></View> {/* الخط العمودي */}
+                <View style={styles.divider}></View>
                 <TextInput
                   placeholder="username@gmail.com"
                   style={styles.input}
                   keyboardType="email-address"
+                  value={email}
+                  onChangeText={setEmail}
+                  autoCapitalize="none"
                 />
               </View>
             </View>
@@ -74,18 +146,19 @@ export default function LoginPage({ navigation }) {
               <Text style={styles.label}>Password</Text>
               <View style={styles.inputWrapper}>
                 <Ionicons name="lock-closed-outline" size={18} color="black" />
-                <View style={styles.divider}></View> {/* الخط العمودي */}
+                <View style={styles.divider}></View>
                 <TextInput
                   placeholder="********"
                   style={styles.input}
                   secureTextEntry={!showPassword}
+                  value={password}
+                  onChangeText={setPassword}
                 />
                 <TouchableOpacity onPress={togglePasswordVisibility}>
                   <Ionicons name={showPassword ? "eye" : "eye-off"} size={18} color="black" />
                 </TouchableOpacity>
               </View>
             </View>
-
 
             <View style={styles.rememberForgetContainer}>
               {/* Remember me */}
@@ -108,9 +181,10 @@ export default function LoginPage({ navigation }) {
             </View>
 
 
-            <TouchableOpacity style={styles.loginButton}>
+            <TouchableOpacity style={styles.loginButton} onPress={handleLogin}>
               <Text style={styles.loginButtonText}>Login</Text>
             </TouchableOpacity>
+
 
             <View style={styles.separator}>
               <Text style={styles.separatorText}>OR</Text>
@@ -175,17 +249,17 @@ export default function LoginPage({ navigation }) {
               >
                 <Text style={styles.modalButtonText}>Cancel</Text>
               </TouchableOpacity>
-             
-             
+
+
               <TouchableOpacity
-              style={styles.modalButton}
-              onPress={() => {
-                setShowTerms(false);
-                router.push('/signup'); // ✅ استخدم router.push للانتقال
-              }}
-            >
-              <Text style={styles.modalButtonText}>I Agree</Text>
-            </TouchableOpacity>
+                style={styles.modalButton}
+                onPress={() => {
+                  setShowTerms(false);
+                  router.push('/signup'); // ✅ استخدم router.push للانتقال
+                }}
+              >
+                <Text style={styles.modalButtonText}>I Agree</Text>
+              </TouchableOpacity>
 
             </View>
           </View>
