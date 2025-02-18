@@ -10,9 +10,10 @@ export default function RootLayout() {
           headerTintColor: '#000',
         }}
       >
-        <Stack.Screen name="index" options={{ headerShown: false, title: 'Home' }} />
-        <Stack.Screen name="login" options={{ title: 'Login' }} /> 
-        <Stack.Screen name="menu" options={{ title: 'Menu' }} />
+        <Stack.Screen name="index" options={{ headerShown: false, title: 'Log' }} />
+        <Stack.Screen name="payment" options={{ title: 'Payment' }} /> 
+        <Stack.Screen name="insertAmount" options={{ title: 'InsertAmount' }} /> 
+        <Stack.Screen name="home" options={{ title: 'Home' }} />
         <Stack.Screen name="contact" options={{ title: 'Contact Us' }} />
         <Stack.Screen name="order" options={{ title: 'Order' }} />
         <Stack.Screen name="signup" options={{ title: 'Sign Up' }} />

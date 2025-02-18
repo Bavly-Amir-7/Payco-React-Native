@@ -11,6 +11,8 @@ import userImage from "../assets/images/Ayco2.png"; // صورة المستخدم
 import balanceBg from "../assets/images/balance-bg.png"; // صورة الخلفية
 import arrow from '../assets/images/Frame 14335.svg'
 import user from '../assets/images/user.svg'
+import Svg, { Path, Mask, G } from 'react-native-svg';
+
 
 
 const Drawer = createDrawerNavigator();
@@ -18,6 +20,18 @@ const Drawer = createDrawerNavigator();
 // ✅ القائمة الجانبية (Aside Drawer)
 function CustomDrawerContent({ navigation }) {
   const [activeItem, setActiveItem] = useState('Overview'); // تحديد العنصر النشط
+
+  const AccountsIcon = ({ width = 16, height = 16, color = "#515151" }) => (
+    <Svg width={width} height={height} viewBox="0 0 16 16" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <Mask id="mask0" maskUnits="userSpaceOnUse" x="-3" y="-3" width="22" height="22">
+        <Path d="M18.6663 18.668H-2.66699V-2.66537H18.6663V18.668Z" fill="white"/>
+      </Mask>
+      <G mask="url(#mask0)">
+        <Path d="M7.99996 16C6.92028 16 5.87247 15.7884 4.88591 15.3713C3.93311 14.9684 3.0778 14.3916 2.34311 13.6569C1.60843 12.9222 1.03187 12.0669 0.628747 11.1141C0.211561 10.1275 0 9.07972 0 8.00004C0 6.92036 0.211561 5.87255 0.628747 4.88599C1.03156 3.93318 1.60843 3.07788 2.34311 2.34319C3.0778 1.60851 3.93311 1.03195 4.88591 0.628826C5.87247 0.21164 6.92028 7.9155e-05 7.99996 7.9155e-05C9.07964 7.9155e-05 10.1274 0.21164 11.114 0.628826C12.0668 1.03164 12.9221 1.60851 13.6568 2.34319C14.3915 3.07788 14.9681 3.93318 15.3712 4.88599C15.7884 5.87255 15.9999 6.92036 15.9999 8.00004C15.9999 9.07972 15.7884 10.1275 15.3712 11.1141C14.9684 12.0669 14.3915 12.9222 13.6568 13.6569C12.9221 14.3916 12.0668 14.9681 11.114 15.3713C10.1274 15.7884 9.07964 16 7.99996 16ZM7.99996 0.937574C4.1056 0.937574 0.937495 4.10568 0.937495 8.00004C0.937495 11.8944 4.1056 15.0625 7.99996 15.0625C11.8943 15.0625 15.0624 11.8944 15.0624 8.00004C15.0624 4.10568 11.8943 0.937574 7.99996 0.937574Z" fill={color}/>
+      </G>
+    </Svg>
+  );
+  
 
   // دالة لتحديث العنصر النشط عند الضغط عليه
   const handlePress = (screen) => {
