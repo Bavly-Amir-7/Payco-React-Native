@@ -3,6 +3,7 @@ import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ImageBackg
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
+import  { useState } from 'react';
 
 // الصور
 import logo from "../assets/images/Ayco2.png"; // الشعار
@@ -16,35 +17,44 @@ const Drawer = createDrawerNavigator();
 
 // ✅ القائمة الجانبية (Aside Drawer)
 function CustomDrawerContent({ navigation }) {
+  const [activeItem, setActiveItem] = useState('Overview'); // تحديد العنصر النشط
+
+  // دالة لتحديث العنصر النشط عند الضغط عليه
+  const handlePress = (screen) => {
+    setActiveItem(screen);
+    navigation.navigate(screen);
+  };
+
   return (
     <ScrollView contentContainerStyle={styles.drawerContainer}>
       {/* صورة المستخدم */}
       <View style={styles.profileSection}>
         <Image source={user} style={styles.profileImage} />
         <Text style={styles.profileName}>Ehab Ayman</Text>
-        <Text style={styles.profileCountry}>Egypt | +20123456789</Text>
+        <Text style={styles.profileCountry}>Egypt | +201234107271</Text>
       </View>
 
       {/* القائمة الجانبية */}
-      <TouchableOpacity style={styles.drawerItem} onPress={() => navigation.navigate('Overview')}>
-        <Ionicons name="grid-outline" size={20} color="red" />
-        <Text style={styles.drawerText}>Overview</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.drawerItem} onPress={() => navigation.navigate('Accounts')}>
-        <Ionicons name="wallet-outline" size={20} color="black" />
-        <Text style={styles.drawerText}>Accounts</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.drawerItem} onPress={() => navigation.navigate('Settings')}>
-        <Ionicons name="settings-outline" size={20} color="black" />
-        <Text style={styles.drawerText}>Settings</Text>
-      </TouchableOpacity>
-
-      <TouchableOpacity style={styles.drawerItem} onPress={() => navigation.navigate('Logout')}>
-        <Ionicons name="log-out-outline" size={20} color="black" />
-        <Text style={styles.drawerText}>Logout</Text>
-      </TouchableOpacity>
+      {[
+        { name: 'Overview', icon: 'grid-outline' },
+        { name: 'Accounts', icon: 'wallet-outline' },
+        { name: 'Letters of credit', icon: 'document-text-outline' },
+        { name: 'Escrow', icon: 'lock-closed-outline' },
+        { name: 'Invoices', icon: 'receipt-outline' },
+        { name: 'Wallets', icon: 'briefcase-outline' },
+        { name: 'Contacts', icon: 'people-outline' },
+        { name: 'Settings', icon: 'settings-outline' },
+        { name: 'Logout', icon: 'log-out-outline' },
+      ].map((item, index) => (
+        <TouchableOpacity
+          key={index}
+          style={[styles.drawerItem, activeItem === item.name && styles.activeItem]}
+          onPress={() => handlePress(item.name)}
+        >
+          <Ionicons name={item.icon} size={20} color={activeItem === item.name ? 'red' : 'black'} />
+          <Text style={[styles.drawerText, activeItem === item.name && styles.activeText]}>{item.name}</Text>
+        </TouchableOpacity>
+      ))}
     </ScrollView>
   );
 }
@@ -72,8 +82,8 @@ function HomeScreen({ navigation }) {
         </View>
         <TouchableOpacity style={styles.walletButton}>
           <Text style={styles.walletText}>My Wallet</Text>
-          <Image source={arrow}  />
-          </TouchableOpacity>
+          <Image source={arrow} />
+        </TouchableOpacity>
       </ImageBackground>
 
       {/* زر المسح الضوئي */}
@@ -131,7 +141,7 @@ const styles = StyleSheet.create({
   balanceLabel: { fontSize: 16, color: '#777' },
   balanceAmount: { fontSize: 24, fontWeight: 'bold', color: '#000' },
 
-  scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center',  padding: 15, borderRadius: 10, marginBottom: 20 },
+  scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', padding: 15, borderRadius: 10, marginBottom: 20 },
   scanText: { marginLeft: 10, fontSize: 16 },
 
   transactions: { flex: 1 },
@@ -145,13 +155,57 @@ const styles = StyleSheet.create({
   floatingButton: { position: 'absolute', bottom: 30, right: 20, backgroundColor: 'red', width: 50, height: 50, borderRadius: 25, justifyContent: 'center', alignItems: 'center' },
   floatingButtonText: { color: '#fff', fontSize: 20, fontWeight: 'bold' },
 
-  drawerContainer: { flexGrow: 1, padding: 20, backgroundColor: '#fff' },
-  profileSection: { alignItems: 'center', marginBottom: 20 },
-  profileImage: { width: 60, height: 60, borderRadius: 30 },
-  profileName: { fontSize: 18, fontWeight: 'bold' },
-  profileCountry: { fontSize: 14, color: '#777' },
-  drawerItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10 },
-  drawerText: { fontSize: 16, marginLeft: 10 },
+  drawerContainer: {
+    flexGrow: 1,
+    paddingVertical: 20,
+    backgroundColor: '#F9F9F9', // لون الخلفية العام للقائمة الجانبية
+  },
+
+  profileSection: {
+    alignItems: 'center',
+    marginBottom: 20,
+  },
+
+  profileImage: {
+    width: 60,
+    height: 60,
+    borderRadius: 30,
+  },
+
+  profileName: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    marginTop: 10,
+  },
+
+  profileCountry: {
+    fontSize: 14,
+    color: '#777',
+  },
+
+  drawerItem: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    paddingVertical: 15,
+    paddingHorizontal: 20,
+    borderRadius: 10,
+    marginVertical: 5,
+  },
+
+  drawerText: {
+    fontSize: 16,
+    marginLeft: 15,
+    color: 'black',
+  },
+
+  activeItem: {
+    backgroundColor: '#FFE5E5', // نفس لون الخلفية اللي في الصورة للعناصر النشطة
+  },
+
+  activeText: {
+    color: 'red', // نفس لون النص عند التفعيل
+  },
+
 
 
 
