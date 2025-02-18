@@ -9,6 +9,7 @@ import { Alert } from 'react-native';
 
 import image1 from "../assets/images/computer.png";
 import image2 from "../assets/images/Ayco2.png";
+import DropDown from './order';
 
 export default function LoginPage({ navigation }) {
   const [showPassword, setShowPassword] = useState(false);
@@ -110,6 +111,9 @@ export default function LoginPage({ navigation }) {
 
 
   return (
+
+
+    
     <View style={styles.container}>
       <View style={styles.content}>
         {/* صورة الكمبيوتر (مخفي على الموبايل) */}
@@ -140,6 +144,8 @@ export default function LoginPage({ navigation }) {
                 />
               </View>
             </View>
+
+
 
 
             <View style={styles.inputContainer}>

@@ -1,14 +1,17 @@
 import React from 'react';
-import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView } from 'react-native';
+import { View, Text, StyleSheet, Image, TouchableOpacity, ScrollView, ImageBackground } from 'react-native';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 import { NavigationContainer } from '@react-navigation/native';
 import { Ionicons, FontAwesome } from '@expo/vector-icons';
 
 // الصور
 import logo from "../assets/images/Ayco2.png"; // الشعار
-import userImage from "../assets/images/Ayco2.png" // صورة المستخدم
+import userImage from "../assets/images/Ayco2.png"; // صورة المستخدم
+import balanceBg from "../assets/images/balance-bg.png"; // صورة الخلفية
+import arrow from '../assets/images/Frame 14335.svg'
+import user from '../assets/images/user.svg'
 
-// إنشاء Drawer
+
 const Drawer = createDrawerNavigator();
 
 // ✅ القائمة الجانبية (Aside Drawer)
@@ -17,7 +20,7 @@ function CustomDrawerContent({ navigation }) {
     <ScrollView contentContainerStyle={styles.drawerContainer}>
       {/* صورة المستخدم */}
       <View style={styles.profileSection}>
-        <Image source={userImage} style={styles.profileImage} />
+        <Image source={user} style={styles.profileImage} />
         <Text style={styles.profileName}>Ehab Ayman</Text>
         <Text style={styles.profileCountry}>Egypt | +20123456789</Text>
       </View>
@@ -61,11 +64,17 @@ function HomeScreen({ navigation }) {
         </TouchableOpacity>
       </View>
 
-      {/* الرصيد */}
-      <View style={styles.balanceCard}>
-        <Text style={styles.balanceLabel}>Total Balance</Text>
-        <Text style={styles.balanceAmount}>$25,000.40</Text>
-      </View>
+      {/* كارد الرصيد مع الخلفية */}
+      <ImageBackground source={balanceBg} style={styles.balanceCard} imageStyle={styles.balanceImage}>
+        <View style={styles.balanceInfo}>
+          <Text style={styles.balanceLabel}>Total Balance</Text>
+          <Text style={styles.balanceAmount}>$25,000.40</Text>
+        </View>
+        <TouchableOpacity style={styles.walletButton}>
+          <Text style={styles.walletText}>My Wallet</Text>
+          <Image source={arrow}  />
+          </TouchableOpacity>
+      </ImageBackground>
 
       {/* زر المسح الضوئي */}
       <TouchableOpacity style={styles.scanButton}>
@@ -78,7 +87,7 @@ function HomeScreen({ navigation }) {
         <Text style={styles.sectionTitle}>Your Recent Transactions</Text>
         {[...Array(5)].map((_, index) => (
           <View key={index} style={styles.transactionItem}>
-            <Image source={userImage} style={styles.transactionImage} />
+            <Image source={user} style={styles.transactionImage} />
             <View>
               <Text style={styles.transactionUser}>Mohammad Adel</Text>
               <Text style={styles.transactionDetail}>Loan Payments</Text>
@@ -112,15 +121,17 @@ export default function App() {
 
 // ✅ الأنماط (Styles)
 const styles = StyleSheet.create({
+
+
   container: { flex: 1, backgroundColor: '#fff', padding: 20 },
   header: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
   logo: { width: 100, height: 30 },
-  
+
   balanceCard: { backgroundColor: '#f3f3f3', padding: 20, borderRadius: 10, alignItems: 'center', marginBottom: 20 },
   balanceLabel: { fontSize: 16, color: '#777' },
   balanceAmount: { fontSize: 24, fontWeight: 'bold', color: '#000' },
 
-  scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center', backgroundColor: '#f3f3f3', padding: 15, borderRadius: 10, marginBottom: 20 },
+  scanButton: { flexDirection: 'row', alignItems: 'center', justifyContent: 'center',  padding: 15, borderRadius: 10, marginBottom: 20 },
   scanText: { marginLeft: 10, fontSize: 16 },
 
   transactions: { flex: 1 },
@@ -141,7 +152,52 @@ const styles = StyleSheet.create({
   profileCountry: { fontSize: 14, color: '#777' },
   drawerItem: { flexDirection: 'row', alignItems: 'center', paddingVertical: 10 },
   drawerText: { fontSize: 16, marginLeft: 10 },
+
+
+
+
+  // الكارد مع الخلفية
+  balanceCard: {
+    width: '100%',
+    height: 120, // تحديد ارتفاع مناسب
+    flexDirection: 'row', // لجعل المحتوى أفقيًا
+    alignItems: 'center',
+    justifyContent: 'space-between', // توزيع العناصر
+    paddingHorizontal: 20, // تنسيق داخلي
+    borderRadius: 15, // حواف دائرية
+    overflow: 'hidden', // منع تجاوز الخلفية
+  },
+
+  balanceImage: {
+    borderRadius: 15, // حواف دائرية للخلفية أيضًا
+    resizeMode: 'cover', // ملء الكارد بالصورة
+  },
+
+  balanceInfo: {
+    justifyContent: 'center',
+  },
+
+  balanceLabel: {
+    fontSize: 16,
+    color: '#444',
+    marginBottom: 5,
+  },
+
+  balanceAmount: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#000',
+  },
+
+  walletButton: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    gap: 5, // المسافة بين النص والأيقونة
+  },
+
+  walletText: {
+    fontSize: 14,
+    color: '#444',
+  },
 });
-
-
 
